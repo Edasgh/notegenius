@@ -1,101 +1,196 @@
-import Image from "next/image";
+"use client";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
+import {
+  ArrowRight,
+  BarChart,
+  CheckCircle,
+  Video,
+  WandSparkles,
+} from "lucide-react";
+
+import Link from "next/link";
+
+const features = [
+  {
+    title: "Transcript Generation for any YouTube Video",
+    image: "transcript.png",
+  },
+  {
+    title: "Ask Anything About Video",
+    image: "analysis.png",
+  },
+  {
+    title: "AI Powered Video Chapters",
+    image: "chapters.png",
+  },
+  {
+    title: "Generate Customized Video Scripts",
+    image: "shooting_script.png",
+  },
+  {
+    title: "Generate Detailed Blog Posts",
+    image: "blog.png",
+  },
+  {
+    title: "Generate High-quality, Click Worthy Thumbnails & Titles",
+    image: "thumbnail.png",
+  },
+  {
+    title: "Audience Analysis of Any YouTube Video",
+    image: "audience.png",
+  },
+];
+
+const steps = [
+  {
+    title: "1. Connect with your content",
+    description: "Share your YouTube video URL and let your agent get to work.",
+    icon: Video,
+  },
+  {
+    title: "2. Get AI-Powered Insights",
+    description:
+      "Our AI extracts the transcript, analyzes engagement, and generates a script for a similar video.",
+    icon: BarChart,
+  },
+  {
+    title: "3. Receive Your Ready-to-Use Content",
+    description:
+      "Copy the script, Download the AI-generated thumbnail, all optimized for better performance.",
+    icon: CheckCircle,
+  },
+];
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+    <div className="min-h-screen">
+      {/* Hero Section */}
+      <section className="py-24 w-full magicpattern">
+        <div className="mx-auto pt-4">
+          <div className="flex flex-col items-center gap-10 text-center mb-12">
+            <div className="flex gap-3 justify-center items-center py-1 bg-purple-200/50 dark:bg-purple-900/60 px-7 rounded-2xl text-purple-800 dark:text-purple-300 border border-purple-500">
+              <WandSparkles className="w-5 h-5 text-purple-800 dark:text-purple-300 animate-pulse duration-[1.2s]" />{" "}
+              AI Powered Notes Summarizer
+            </div>
+            <h1 className="text-4xl md:text-7xl font-bold text-gray-900 dark:text-gray-400 mb-6 group cursor-default">
+              Explore&nbsp;
+              <span className="bg-gradient-to-r from-purple-900 dark:from-purple-500 to-purple-400/50 dark:to-purple-200 bg-clip-text text-transparent group-hover:bg-gradient-to-b transition-all duration-300">
+                Notegenius
+              </span>
+            </h1>
+            <p className="text-xl text-gray-900 dark:text-gray-400 mb-8 max-w-xl mx-auto">
+              Upload notes, summarize key points, ask questions, and generate
+              insights from documents, YouTube videos, or GitHub repos—all in
+              one place.
+            </p>
+            <SignedIn>
+              <Link
+                className="relative inline-flex gap-2 items-center justify-center px-8 py-3.5 text-base font-medium text-white bg-gradient-to-r from-gray-900 to-gray-800 dark:from-blue-950 dark:to-blue-700 rounded-full hover:from-gray-800 hover:to-gray-700 dark:hover:from-blue-900 dark:hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
+                href={"/dashboard/search"}
+              >
+                Get Started <ArrowRight suppressHydrationWarning />
+              </Link>
+            </SignedIn>
+            <SignedOut>
+              <SignInButton
+                mode="modal"
+                fallbackRedirectUrl={"/"}
+                forceRedirectUrl={"/"}
+              >
+                <button className="group cursor-pointer relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white dark:text-gray-200 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-blue-950 dark:to-blue-700 rounded-full hover:from-gray-800 hover:to-gray-700 dark:hover:from-blue-900 dark:hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                  Get Started
+                  <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 dark:text-gray-300" />
+                  <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-900/20 to-gray-800/20 dark:from-gray-700/30 dark:to-gray-600/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
+                </button>
+              </SignInButton>
+            </SignedOut>
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </section>
+      {/* Features Section */}
+      {/* <section className="py-20 px-4 bg-white dark:bg-gray-900/95"> */}
+
+      {/* <div className="mx-auto px-4 max-w-6xl"> */}
+      {/* <h2 className="text-4xl font-bold text-center mb-12">
+            Powerful features for Content Creators
+          </h2> */}
+
+      {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"> */}
+      {/* feature cards */}
+      {/* {features.map((feature, index) => (
+              <div
+                key={index}
+                className="bg-gradient-to-tl from-blue-200 dark:from-blue-700 via-gray-200 dark:via-gray-800 to-blue-500 dark:to-blue-950 group p-6 py-10 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-blue-500   dark:hover:border-blue-300 hover:bg-gradient-to-l transition-all duration-1000 flex flex-col h-[420px] relative overflow-hidden"
+              >
+                <Link href={"/analysis"}>
+                  <Image
+                    src={`/images/${feature.image}`}
+                    width={360}
+                    height={270}
+                    alt={`${feature.title}`}
+                    className="object-contain rounded-lg opacity-90 shadow-blue-900 shadow-xs transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
+                  />
+                </Link>
+                <h3 className="text-xl text-black dark:text-white font-semibold mt-4">
+                  {feature.title}
+                </h3>
+              </div>
+            ))} */}
+      {/* </div> */}
+      {/* </div> */}
+      {/* </section> */}
+      {/* How it works section */}
+      {/* <section className="py-20 px-4 md:px-0 bg-gray-50 dark:bg-gray-800/95"> */}
+      {/* <div className="container mx-auto max-w-6xl"> */}
+      {/* <h2 className="text-3xl font-bold text-center mb-12">
+            Meet your AI Agent in 3 Simple Steps
+          </h2> */}
+
+      {/* <div className="grid md:grid-cols-3 gap-8"> */}
+      {/* {steps.map((step, index) => (
+              <div
+                key={index}
+                className="text-center p-6 rounded-xl bg-white dark:bg-gray-700 shadow-md hover:shadow-lg dark:shadow-gray-900 transition-all"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <step.icon className={`w-8 h-8 text-white`} />
+                </div>
+                <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
+
+                <p className="text-gray-600 dark:text-gray-400">
+                  {step.description}
+                </p>
+              </div>
+            ))} */}
+      {/* </div> */}
+      {/* </div> */}
+      {/* </section> */}
+      {/* Footer section */}
+      {/* <footer className="py-20 bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-900 dark:to-blue-500">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-white mb-6">
+            Ready to meet your AI Content Agent?
+          </h2>
+          <p className="text-xl text-blue-50">
+            Join creators leveraging AI to unlock content insights
+          </p>
+
+          <SignedIn>
+            <Button suppressHydrationWarning className="cursor-pointer my-5">
+              <Link href="/analysis">Get Started</Link>
+            </Button>
+          </SignedIn>
+          <SignedOut>
+            <SignInButton
+              mode="modal"
+              fallbackRedirectUrl={"/"}
+              forceRedirectUrl={"/"}
+            >
+              <Button className="cursor-pointer my-5">Get Started</Button>
+            </SignInButton>
+          </SignedOut>
+        </div>
+      </footer> */}
     </div>
   );
 }

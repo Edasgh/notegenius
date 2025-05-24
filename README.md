@@ -1,36 +1,139 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-## Getting Started
+# 🧠 Notegenius – Your AI-Powered Study Companion
 
-First, run the development server:
+**Notegenius** is an all-in-one intelligent notes platform for students. Upload notes, summarize them, ask questions, extract insights from YouTube videos or GitHub repositories, and supercharge your learning with AI.
+
+---
+
+## ❓ Problem Statement
+
+In today’s fast-paced academic environment, students often struggle with managing and understanding large volumes of study material from various sources—class notes, online lectures, YouTube videos, and open-source code repositories. Traditional note-taking methods are time-consuming, fragmented, and lack interactivity or personalization.
+
+Students need a centralized, intelligent platform that not only stores their learning resources but also helps them **understand, summarize, and interact** with the content more effectively.
+
+**Notegenius** addresses this challenge by providing an AI-powered environment where students can:
+
+* Upload notes and generate smart summaries
+* Ask specific questions about any part of their content
+* Convert YouTube videos into structured notes
+* Explore and understand GitHub codebases through natural language
+
+---
+## ✨ Features
+
+### 📄 Notes Upload & Summarization
+- Upload files (PDF, DOCX, TXT)
+- Automatically generate concise, bullet-point, or detailed summaries
+- Highlight important sections with AI assistance
+
+### 🤖 AI Q&A
+- Ask questions about your uploaded notes
+- Select specific lines or text to get targeted answers
+- Chat interface powered by OpenAI or other LLMs
+
+### 🎥 YouTube Video Notes
+- Paste a YouTube video link
+- Extract transcripts and generate structured notes
+- Break content down by timestamps or topics
+
+### 💻 GitHub Repository Q&A
+- Add any public GitHub repository
+- Ask questions about code, architecture, or specific files
+- Get summaries of complex functions or file structures
+
+### 🔁 Study Tools (Upcoming features)
+- Flashcard generator from notes
+- Quiz generator (MCQs or short answers)
+- Study planner and progress tracker
+- Export to PDF, DOCX, or Anki
+
+---
+
+## 🚀 Tech Stack
+
+| Layer        | Technology                               |
+|--------------|------------------------------------------|
+| Frontend     | Next.js, Shadcn UI, Tailwind CSS         |
+| Backend      | Node.js, Express (or Next API)           |
+| AI Services  | Gemini API, LangChain                    |
+| File Storage | Convex Cloud Storage                     |
+| Vector DB    | Convex                                   |
+| Auth         | Clerk                                    |
+
+---
+
+## 🛠 Installation
+
+### 1. Clone the repo
+```bash
+git clone https://github.com/yourusername/studyspark.git
+cd studyspark
+````
+
+### 2. Install dependencies
+
+```bash
+npm install
+# or
+yarn install
+```
+
+### 3. Set up environment variables
+
+Create a `.env.local` file:
+
+```env
+GEMINI_API_KEY=your-gemini-key
+NEXT_PUBLIC_CONVEX_URL=your-convex-url
+CONVEX_DEPLOYMENT=your-convex-deployment
+GITHUB_TOKEN=your-github-token
+```
+
+### 4. Run the app
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Visit `http://localhost:3000`
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+---
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📦 Folder Structure
 
-## Learn More
+```
+/components      – Reusable React components
+/pages           – Next.js routes
+/lib             – Utility functions and API wrappers
+/app/api         – Server actions and file processing
+/styles          – Tailwind styles
+/public          – Static assets
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🤝 Contributing
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Contributions are welcome! Please open an issue or submit a PR if you have ideas, suggestions, or fixes.
 
-## Deploy on Vercel
+---
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📄 License
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT License
+
+---
+
+## 🙌 Acknowledgements
+
+* [GEMINI](https://gemini.google.com)
+* [LangChain](https://www.langchain.com)
+* [Convex](https://www.convex.dev)
+* [YouTube Transcript API](https://rapidapi.com/)
+
+---
+
+## 📬 Contact
+
+**Made with ❤️ for students everywhere.**
+
