@@ -18,6 +18,7 @@ import type * as documentsChunks from "../documentsChunks.js";
 import type * as messages from "../messages.js";
 import type * as note from "../note.js";
 import type * as project from "../project.js";
+import type * as sourceCodeEmbedding from "../sourceCodeEmbedding.js";
 import type * as storage from "../storage.js";
 
 /**
@@ -34,6 +35,7 @@ declare const fullApi: ApiFromModules<{
   messages: typeof messages;
   note: typeof note;
   project: typeof project;
+  sourceCodeEmbedding: typeof sourceCodeEmbedding;
   storage: typeof storage;
 }>;
 export declare const api: FilterApi<

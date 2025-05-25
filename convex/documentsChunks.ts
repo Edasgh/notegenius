@@ -38,7 +38,7 @@ export const searchChunks = action({
   handler: async (ctx, args) => {
     const results = await ctx.vectorSearch("documentsChunks", "by_embedding", {
       vector: args.searchQuery,
-      limit: 10,
+      limit: 5,
       filter: (q) =>
         q.or(q.eq("userId", args.userId), q.eq("docId", args.docId)),
     });

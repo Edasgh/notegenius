@@ -21,6 +21,7 @@ export const saveNote = mutation({
     description: v.string(),
     link: v.optional(v.string()),
     userId: v.string(),
+    recordTitle: v.string(),
   },
   handler: async (ctx, args) => {
     //find existing Note
@@ -36,12 +37,20 @@ export const saveNote = mutation({
       return existingNote._id;
     }
 
-    const noteId = await ctx.db.insert("note", {
-      title: args.title,
-      description: args.description,
-      userId: args.userId,
-      link: args.link,
-    });
+    const noteId = args.link
+      ? await ctx.db.insert("note", {
+          title: args.title,
+          description: args.description,
+          userId: args.userId,
+          link: args.link,
+          recordTitle: args.recordTitle,
+        })
+      : await ctx.db.insert("note", {
+          title: args.title,
+          description: args.description,
+          userId: args.userId,
+          recordTitle: args.recordTitle,
+        });
 
     return noteId;
   },

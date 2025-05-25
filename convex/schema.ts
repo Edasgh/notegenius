@@ -85,6 +85,7 @@ export default defineSchema({
     title: v.string(),
     link: v.optional(v.string()),
     description: v.string(),
+    recordTitle:v.string(),
   })
     .index("by_user_id", ["userId"])
     .index("by_user_and_title", ["userId", "title"]),
