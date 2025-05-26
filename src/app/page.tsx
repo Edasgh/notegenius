@@ -1,69 +1,58 @@
 "use client";
+import Header from "@/components/Header";
+import { Button } from "@/components/ui/button";
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import {
   ArrowRight,
-  BarChart,
-  CheckCircle,
-  Video,
+  BookOpenCheck,
+  Brain,
+  UploadCloudIcon,
   WandSparkles,
 } from "lucide-react";
+import Image from "next/image";
 
 import Link from "next/link";
 
 const features = [
   {
-    title: "Transcript Generation for any YouTube Video",
+    title: "Summarize Any YouTube Video",
     image: "transcript.png",
   },
   {
-    title: "Ask Anything About Video",
+    title: "Understand and Ask About Your Notes",
     image: "analysis.png",
   },
   {
-    title: "AI Powered Video Chapters",
+    title: "Explore GitHub Repos with AI Explanations",
     image: "chapters.png",
-  },
-  {
-    title: "Generate Customized Video Scripts",
-    image: "shooting_script.png",
-  },
-  {
-    title: "Generate Detailed Blog Posts",
-    image: "blog.png",
-  },
-  {
-    title: "Generate High-quality, Click Worthy Thumbnails & Titles",
-    image: "thumbnail.png",
-  },
-  {
-    title: "Audience Analysis of Any YouTube Video",
-    image: "audience.png",
   },
 ];
 
 const steps = [
   {
-    title: "1. Connect with your content",
-    description: "Share your YouTube video URL and let your agent get to work.",
-    icon: Video,
+    title: "1. Upload Your Study Material",
+    description:
+      "Add your notes, YouTube video links, or GitHub repositories to get started.",
+    icon: UploadCloudIcon, // Replace with your actual icon component
   },
   {
-    title: "2. Get AI-Powered Insights",
+    title: "2. Unlock AI-Powered Understanding",
     description:
-      "Our AI extracts the transcript, analyzes engagement, and generates a script for a similar video.",
-    icon: BarChart,
+      "Our AI summarizes content, explains key concepts, and answers questions in real-time.",
+    icon: Brain, // Replace with your actual icon component
   },
   {
-    title: "3. Receive Your Ready-to-Use Content",
+    title: "3. Study Smarter, Not Harder",
     description:
-      "Copy the script, Download the AI-generated thumbnail, all optimized for better performance.",
-    icon: CheckCircle,
+      "Generate flashcards, quizzes, and structured notes to reinforce learning and retain more.",
+    icon: BookOpenCheck, // Replace with your actual icon component
   },
 ];
 
 export default function Home() {
   return (
     <div className="min-h-screen">
+      <Header/>
       {/* Hero Section */}
       <section className="py-24 w-full magicpattern">
         <div className="mx-auto pt-4">
@@ -97,7 +86,7 @@ export default function Home() {
                 fallbackRedirectUrl={"/"}
                 forceRedirectUrl={"/"}
               >
-                <button className="group cursor-pointer relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white dark:text-gray-200 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-blue-950 dark:to-blue-700 rounded-full hover:from-gray-800 hover:to-gray-700 dark:hover:from-blue-900 dark:hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                <button className="group cursor-pointer relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white dark:text-gray-200 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-indigo-950 dark:to-indigo-700 rounded-full hover:from-gray-800 hover:to-gray-700 dark:hover:from-indigo-900 dark:hover:to-indigo-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                   Get Started
                   <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-0.5 dark:text-gray-300" />
                   <div className="absolute inset-0 rounded-full bg-gradient-to-r from-gray-900/20 to-gray-800/20 dark:from-gray-700/30 dark:to-gray-600/30 blur-xl opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -108,19 +97,18 @@ export default function Home() {
         </div>
       </section>
       {/* Features Section */}
-      {/* <section className="py-20 px-4 bg-white dark:bg-gray-900/95"> */}
+      <section className="py-20 px-4 bg-white dark:bg-gray-900/95">
+        <div className="mx-auto px-4 max-w-6xl">
+          <h2 className="text-4xl font-bold text-center mb-12">
+            Features Specially designed for Students
+          </h2>
 
-      {/* <div className="mx-auto px-4 max-w-6xl"> */}
-      {/* <h2 className="text-4xl font-bold text-center mb-12">
-            Powerful features for Content Creators
-          </h2> */}
-
-      {/* <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"> */}
-      {/* feature cards */}
-      {/* {features.map((feature, index) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* feature cards */}
+            {features.map((feature, index) => (
               <div
                 key={index}
-                className="bg-gradient-to-tl from-blue-200 dark:from-blue-700 via-gray-200 dark:via-gray-800 to-blue-500 dark:to-blue-950 group p-6 py-10 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-blue-500   dark:hover:border-blue-300 hover:bg-gradient-to-l transition-all duration-1000 flex flex-col h-[420px] relative overflow-hidden"
+                className="bg-gradient-to-tl from-blue-200 dark:from-indigo-700 via-gray-200 dark:via-gray-800 to-indigo-500 dark:to-indigo-950 group p-6 py-10 rounded-xl border border-gray-200 dark:border-gray-600 hover:border-indigo-500   dark:hover:border-indigo-300 hover:bg-gradient-to-l transition-all duration-1000 flex flex-col h-[420px] relative overflow-hidden"
               >
                 <Link href={"/analysis"}>
                   <Image
@@ -128,31 +116,31 @@ export default function Home() {
                     width={360}
                     height={270}
                     alt={`${feature.title}`}
-                    className="object-contain rounded-lg opacity-90 shadow-blue-900 shadow-xs transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
+                    className="object-contain rounded-lg opacity-90 shadow-indigo-900 shadow-xs transition-all duration-300 group-hover:scale-105 group-hover:opacity-100"
                   />
                 </Link>
                 <h3 className="text-xl text-black dark:text-white font-semibold mt-4">
                   {feature.title}
                 </h3>
               </div>
-            ))} */}
-      {/* </div> */}
-      {/* </div> */}
-      {/* </section> */}
+            ))}
+          </div>
+        </div>
+      </section>
       {/* How it works section */}
-      {/* <section className="py-20 px-4 md:px-0 bg-gray-50 dark:bg-gray-800/95"> */}
-      {/* <div className="container mx-auto max-w-6xl"> */}
-      {/* <h2 className="text-3xl font-bold text-center mb-12">
+      <section className="py-20 px-4 md:px-0 bg-gray-50 dark:bg-gray-800/95">
+        <div className="container mx-auto max-w-6xl">
+          <h2 className="text-3xl font-bold text-center mb-12">
             Meet your AI Agent in 3 Simple Steps
-          </h2> */}
+          </h2>
 
-      {/* <div className="grid md:grid-cols-3 gap-8"> */}
-      {/* {steps.map((step, index) => (
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step, index) => (
               <div
                 key={index}
                 className="text-center p-6 rounded-xl bg-white dark:bg-gray-700 shadow-md hover:shadow-lg dark:shadow-gray-900 transition-all"
               >
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-600 to-blue-400 rounded-full flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gradient-to-r from-purple-600 to-purple-400 rounded-full flex items-center justify-center mx-auto mb-4">
                   <step.icon className={`w-8 h-8 text-white`} />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">{step.title}</h3>
@@ -161,36 +149,36 @@ export default function Home() {
                   {step.description}
                 </p>
               </div>
-            ))} */}
-      {/* </div> */}
-      {/* </div> */}
-      {/* </section> */}
+            ))}
+          </div>
+        </div>
+      </section>
       {/* Footer section */}
-      {/* <footer className="py-20 bg-gradient-to-r from-blue-600 to-blue-400 dark:from-blue-900 dark:to-blue-500">
+      <footer className="py-20 bg-gradient-to-r from-indigo-600 to-indigo-400 dark:from-indigo-900 dark:to-indigo-500">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-white mb-6">
-            Ready to meet your AI Content Agent?
+            Ready to Supercharge Your Studies?
           </h2>
-          <p className="text-xl text-blue-50">
-            Join creators leveraging AI to unlock content insights
+          <p className="text-xl text-indigo-50">
+            Join students using AI to learn faster, deeper, and smarter.
           </p>
 
           <SignedIn>
             <Button suppressHydrationWarning className="cursor-pointer my-5">
-              <Link href="/analysis">Get Started</Link>
+              <Link href="/dashboard">Start Learning</Link>
             </Button>
           </SignedIn>
           <SignedOut>
             <SignInButton
               mode="modal"
               fallbackRedirectUrl={"/"}
-              forceRedirectUrl={"/"}
+              forceRedirectUrl={"/dashboard"}
             >
-              <Button className="cursor-pointer my-5">Get Started</Button>
+              <Button className="cursor-pointer my-5">Start Learning</Button>
             </SignInButton>
           </SignedOut>
         </div>
-      </footer> */}
+      </footer>
     </div>
   );
 }

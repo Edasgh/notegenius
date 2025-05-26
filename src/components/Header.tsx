@@ -66,7 +66,7 @@ const Header = () => {
                 variant="outline"
                 className="mr-4 dark:border-[0.2px] dark:border-gray-500 bg-gradient-to-r  from-purple-600 dark:from-purple-400 to-purple-400 dark:to-purple-100 text-transparent bg-clip-text"
               >
-                <Link href="/dashboard">Dashboard</Link>
+                <Link href="/dashboard/search">Dashboard</Link>
               </Button>
               <div className="p-2 w-10 h-10 flex items-center justify-center rounded-full border bg-blue-100 dark:bg-gray-700 border-blue-200 dark:border-blue-950 ">
                 <UserButton />
