@@ -13,7 +13,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import AddProject from "@/components/AddProject";
-import { UploadDocument } from "@/components/UploadDocument";
+import UploadDocument from "@/components/UploadDocument";
 import Notes from "./notes/page";
 import AddVideo from "@/components/AddVideo";
 
@@ -22,8 +22,9 @@ function AddNoteDropDown() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button className="cursor-pointer flex gap-1.5">
-          <PlusIcon/>
-          Add Note</Button>
+          <PlusIcon />
+          Add Note
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="py-1 px-3">
         <DropdownMenuLabel>Add a Note via</DropdownMenuLabel>
@@ -31,7 +32,7 @@ function AddNoteDropDown() {
         <div className="flex flex-col gap-2 justify-start items-start">
           <AddProject />
           <UploadDocument />
-          <AddVideo/>
+          <AddVideo />
         </div>
       </DropdownMenuContent>
     </DropdownMenu>

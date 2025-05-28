@@ -1,4 +1,4 @@
-import { DashboardSidebar } from "@/components/DashboardSidebar";
+import DashboardSidebar from "@/components/DashboardSidebar";
 import Header from "@/components/Header";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
@@ -9,7 +9,7 @@ export default function DashboardLayout({
 }) {
   return (
     <>
-      <Header/>
+      <Header />
       <SidebarProvider suppressHydrationWarning>
         <DashboardSidebar />
         <main className="flex-1 bg-white dark:bg-[#020427] flex flex-col min-w-0">
