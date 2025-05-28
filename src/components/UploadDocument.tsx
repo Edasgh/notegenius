@@ -20,7 +20,7 @@ type DocumentInput = {
   document_file: FileList;
 };
 
-export function UploadDocument() {
+export default function UploadDocument() {
   const { user } = useUser();
   const btnRef = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, reset, formState } = useForm<DocumentInput>();

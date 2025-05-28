@@ -21,7 +21,7 @@ import {
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-export function DashboardSidebar() {
+export default function DashboardSidebar() {
   const pathName = usePathname();
   return (
     <Sidebar className="mt-16">
