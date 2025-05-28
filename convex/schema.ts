@@ -72,7 +72,7 @@ export default defineSchema({
             projectId: v.id("project"),
             sourceCode: v.string(),
             fileName: v.string(),
-            bulletPointSummary: v.string(),
+            bulletPointSummary: v.optional(v.string()),
             summaryEmbedding: v.optional(v.array(v.float64())),
           }),
         })
@@ -95,7 +95,7 @@ export default defineSchema({
     userId: v.string(),
     videoId: v.string(),
     title: v.string(),
-    url:v.string(),
+    url: v.string(),
     description: v.string(),
     thumbnail: v.string(),
     transcript: v.optional(

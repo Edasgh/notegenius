@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
@@ -28,7 +28,13 @@ export default function SummaryVideo() {
     videoRecordId: videoId as Id<"video">,
   });
   const [loading, setLoading] = useState(false);
-  const [videoSummary, setvideoSummary] = useState(currentVideo?.summary ?? "");
+  const [videoSummary, setvideoSummary] = useState("");
+
+  useEffect(() => {
+    if (currentVideo && currentVideo.summary) {
+      setvideoSummary(currentVideo.summary);
+    }
+  }, [currentVideo]);
 
   if (
     !videoId ||
@@ -59,6 +65,8 @@ export default function SummaryVideo() {
       toast.success("Summary generated!");
     } catch (error) {
       toast.error("Couldn't generate summary!");
+    }finally{
+      setLoading(false);
     }
   }
 

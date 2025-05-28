@@ -21,7 +21,7 @@ export const getAllMessages = query({
 export const send = mutation({
   args: {
     userId: v.string(),
-    recordId: v.union(v.id("project"), v.id("documents"),v.id("video")),
+    recordId: v.union(v.id("project"), v.id("documents"), v.id("video")),
     isAProject: v.boolean(),
     text: v.string(),
     isHuman: v.boolean(),
@@ -35,7 +35,7 @@ export const send = mutation({
             projectId: v.id("project"),
             sourceCode: v.string(),
             fileName: v.string(),
-            bulletPointSummary: v.string(),
+            bulletPointSummary: v.optional(v.string()),
             summaryEmbedding: v.optional(v.array(v.float64())),
           }),
         })

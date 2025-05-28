@@ -1,10 +1,9 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
 import { toast } from "sonner";
-// import { generateSummary } from "../@chatDoc/actions";
 import { useUser } from "@clerk/nextjs";
 import { CopyIcon, Download, Loader2Icon } from "lucide-react";
 import { getConvexClient } from "@/lib/convex";
@@ -19,6 +18,8 @@ import { useQuery } from "convex/react";
 import { api } from "../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../convex/_generated/dataModel";
 import { useAppSelector } from "@/lib/store/hooks";
+import { generateCodeFileSummary } from "../actions";
+import ProjectSummaryLoading from "./loading";
 
 const SummaryProj = () => {
   const params = useParams<{ projId: string }>();
@@ -33,6 +34,18 @@ const SummaryProj = () => {
   const [loading, setLoading] = useState(false);
   const [codeFileSummary, setcodeFileSummary] = useState("");
 
+  useEffect(() => {
+    if (
+      currentProject &&
+      selectedFiles &&
+      selectedFiles[0] &&
+      selectedFiles[0].bulletPointSummary &&
+      selectedFiles[0].bulletPointSummary.trim().length > 0
+    ) {
+      setcodeFileSummary(selectedFiles[0].bulletPointSummary);
+    }
+  }, [currentProject, selectedFiles]);
+
   if (
     !projId ||
     currentProject === null ||
@@ -42,9 +55,7 @@ const SummaryProj = () => {
   ) {
     return (
       <>
-        <div className="text-red-400 text-xl w-full py-4 px-5 border border-dashed border-red-400 text-center rounded-md">
-          You have no access to view this code file
-        </div>
+        <ProjectSummaryLoading/>
       </>
     );
   }
@@ -52,14 +63,19 @@ const SummaryProj = () => {
   async function generatecodeFileSummary() {
     try {
       setLoading(true);
-      //   const { output, error } = await generateSummary(projId, user?.id ?? "");
-      //   if (!output || error) {
-      //     throw new Error("Couldn't generate summary");
-      //   }
-      setcodeFileSummary("output");
+      const { summary, error } = await generateCodeFileSummary(
+        selectedFiles[0]._id,
+        user?.id ?? ""
+      );
+      if (!summary || error) {
+        throw new Error("Couldn't generate summary");
+      }
+      setcodeFileSummary(summary);
       toast.success("Summary generated!");
     } catch (error) {
       toast.error("Couldn't generate summary!");
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -114,12 +130,17 @@ const SummaryProj = () => {
               <Loader2Icon className="w-8 h-8 animate-spin" /> Generating..
             </Button>
           ) : (
-            <Button
-              className="py-4 px-5 text-lg"
-              onClick={generatecodeFileSummary}
-            >
-              Generate Summary of {selectedFiles[0].fileName}
-            </Button>
+            <div className="flex flex-col gap-5 justify-center items-center">
+              <Button
+                className="py-4 px-5 text-lg"
+                onClick={generatecodeFileSummary}
+              >
+                Generate Summary
+              </Button>
+              <p className="text-sm text-gray-600 dark:text-gray-400">
+               Summarize the file : {selectedFiles[0].fileName}
+              </p>
+            </div>
           )}
         </>
       ) : (

@@ -32,6 +32,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import ChatLoading from "./loading";
 
 type fileRefference = {
   type: "sourceCodeEmbedding";
@@ -69,7 +70,7 @@ export default function Project() {
 
   useEffect(() => {
     msgRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, []);
+  }, [messages]);
 
   if (
     !projId ||
@@ -113,9 +114,8 @@ export default function Project() {
             selectedFiles
           )
         : await askProjQuestion(question as string, projId, user.id);
-    setFileRefferences(fileRefferences);
     let generatedMsg = "";
-
+    setFileRefferences(fileRefferences);
     for await (const delta of readStreamableValue(output)) {
       if (delta) {
         generatedMsg += delta;
@@ -123,18 +123,34 @@ export default function Project() {
     }
     await sendMessage({
       fileRefferences: fileRefferences.map((file) => {
-        return {
-          type: `${file.type}`,
-          score: file.score,
-          record: {
-            fileName: file.record.fileName,
-            projectId: file.record.projectId,
-            sourceCode: file.record.sourceCode,
-            bulletPointSummary: file.record.bulletPointSummary as string,
-            userId: file.record.userId,
-            summaryEmbedding: file.record.summaryEmbedding,
-          },
-        };
+        if (
+          file.record.bulletPointSummary &&
+          file.record.bulletPointSummary.trim().length === 0
+        ) {
+          return {
+            type: `${file.type}`,
+            score: file.score,
+            record: {
+              fileName: file.record.fileName,
+              projectId: file.record.projectId,
+              sourceCode: file.record.sourceCode,
+              bulletPointSummary: file.record.bulletPointSummary as string,
+              userId: file.record.userId,
+              summaryEmbedding: file.record.summaryEmbedding,
+            },
+          };
+        } else {
+          return {
+            type: `${file.type}`,
+            score: file.score,
+            record: {
+              fileName: file.record.fileName,
+              projectId: file.record.projectId,
+              sourceCode: file.record.sourceCode,
+              userId: file.record.userId,
+            },
+          };
+        }
       }),
       isHuman: false,
       recordId: projId as Id<"project">,
@@ -147,12 +163,14 @@ export default function Project() {
     generatedMsg = "";
   };
 
-  if (!projId || currentProject === null || currentProject === undefined) {
-    return (
-      <div className="text-red-400 w-full py-4 px-5 border border-dashed border-red-400 text-center">
-        You have no access to view this project
-      </div>
-    );
+  if (
+    !projId ||
+    currentProject === null ||
+    currentProject === undefined ||
+    !selectedFiles ||
+    selectedFiles.length === 0
+  ) {
+    return <ChatLoading />;
   }
 
   const copyText = (text: string) => {
@@ -293,7 +311,7 @@ export default function Project() {
               />
               <div className="flex flex-col gap-1 justify-start items-start">
                 <span className="font-semibold text-sm">
-                  The selected files are :{" "}
+                  The selected file is :{" "}
                 </span>
                 <div
                   className={
@@ -301,7 +319,7 @@ export default function Project() {
                   }
                 >
                   {selectedFiles.map((file, index) => (
-                    <p className="text-sm" key={index}>
+                    <p className="text-sm break-all" key={index}>
                       {file.fileName}
                     </p>
                   ))}
@@ -319,7 +337,7 @@ export default function Project() {
               id="project_message"
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
-              placeholder={`Ask anything about ${currentProject.name}...`}
+              placeholder={`Ask anything about ${selectedFiles[0].fileName}...`}
               className="flex-1 px-4 py-2 ring-1 ring-gray-300 dark:ring-gray-500 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent dark:bg-gray-800 dark:text-gray-200 text-sm md:text-lg"
               required
               suppressHydrationWarning

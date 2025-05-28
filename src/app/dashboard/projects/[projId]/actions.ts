@@ -2,10 +2,7 @@
 import { streamText } from "ai";
 import { createStreamableValue } from "ai/rsc";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import {
-  generateEmbedding,
-  summarizeCodeInBulletPoints,
-} from "@/lib/gemini";
+import { generateEmbedding, summarizeCodeInBulletPoints } from "@/lib/gemini";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "../../../../../convex/_generated/api";
 import { Doc, Id } from "../../../../../convex/_generated/dataModel";
@@ -98,7 +95,13 @@ export async function generateCodeFileSummary(id: string, userId: string) {
     );
     if (!codeFile || codeFile === undefined || codeFile === null) {
       return {
-        output: "Sorry, this code file doesn't exist!",
+        error: "Sorry, this code file doesn't exist!",
+      };
+    }
+    const existingSummary = codeFile.bulletPointSummary;
+    if (existingSummary) {
+      return {
+        summary: existingSummary,
       };
     }
     const bulletPointSummary = await summarizeCodeInBulletPoints(
@@ -133,4 +136,3 @@ export async function generateCodeFileSummary(id: string, userId: string) {
     };
   }
 }
-

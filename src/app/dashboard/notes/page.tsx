@@ -126,7 +126,7 @@ function EditNoteModal({
         link,
       });
       toast.success("Note updated successfully!");
-      if(btnRef.current){
+      if (btnRef.current) {
         btnRef.current.click();
       }
     } catch (error) {
@@ -199,68 +199,64 @@ function ViewNoteModal({
   noteId: Id<"note">;
   userId: string;
 }) {
-  const Note = useQuery(api.note.getNoteById, {
+  const note = useQuery(api.note.getNoteById, {
     noteId,
     userId,
   });
+
+  const isLoading = note === undefined;
+  const notFound = note === null;
 
   return (
     <Dialog>
       <DialogTrigger asChild suppressHydrationWarning>
         <span className="py-3 px-5 text-sm bg-black text-white dark:bg-white/95 dark:text-black rounded-lg flex gap-2 justify-center items-center cursor-pointer">
-          <LucideEye className="w-4 h-4" suppressHydrationWarning />
+          <LucideEye className="w-4 h-4" />
           View
         </span>
       </DialogTrigger>
-      {Note === null || Note === undefined ? (
-        <DialogContent
-          className="w-fit h-[500px] px-4"
-          suppressHydrationWarning
-        >
-          <DialogHeader>
-            <DialogTitle>Note</DialogTitle>
-            <DialogDescription>No Note to Show</DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      ) : (
-        <DialogContent
-          className="w-fit h-[500px] px-4"
-          suppressHydrationWarning
-        >
-          <DialogHeader>
-            <DialogTitle>{Note.title}</DialogTitle>
+
+      <DialogContent
+        className="w-[90vw] max-w-2xl h-[500px] px-4 overflow-y-auto"
+        suppressHydrationWarning
+      >
+        <DialogHeader>
+          <DialogTitle>
+            {isLoading && "Loading..."}
+            {notFound && "Note Not Found"}
+            {!isLoading && !notFound && note.title}
+          </DialogTitle>
+
+          {!isLoading && !notFound && note.link && (
             <DialogDescription>
-              {Note.link && (
-                <Link
-                  href={`${Note.link}`}
-                  target="_blank"
-                  title="visit link"
-                  className="hover:underline text-gray-500 break-all"
-                >
-                  {Note.link}
-                </Link>
-              )}
+              <Link
+                href={note.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:underline text-gray-500 break-all"
+              >
+                {note.link}
+              </Link>
             </DialogDescription>
-          </DialogHeader>
-          <p
-            className="text-sm break-words w-fit overflow-y-auto"
-            suppressHydrationWarning
-          >
+          )}
+        </DialogHeader>
+
+        {!isLoading && !notFound && (
+          <div className="text-sm break-words w-full overflow-y-auto space-y-3">
             <span className="text-gray-500 font-semibold underline">
-              Description:{" "}
+              Description:
             </span>
-            <br />
             <MDEditor.Markdown
-              source={Note.description}
+              source={note.description}
               style={{
                 backgroundColor: "#23203d",
                 color: "white",
               }}
-              className={`py-4 px-5 border rounded-md shadow-md overflow-auto`}
+              className="py-4 px-5 border rounded-md shadow-md"
             />
-          </p>
-        </DialogContent>
-      )}
+          </div>
+        )}
+      </DialogContent>
     </Dialog>
   );
 }

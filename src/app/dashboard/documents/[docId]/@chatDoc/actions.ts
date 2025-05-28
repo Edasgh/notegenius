@@ -28,12 +28,6 @@ export async function askDocQuestion(
     docId: docId as Id<"documents">,
   });
 
-  // if(!document||document===undefined||document===null){
-  //   return {
-  //     output: "Sorry, this document doesn't exist!",
-  //   };
-  // }
-
   // Perform vector search for relevant chunks
   const chunks = await convexClient.action(api.documentsChunks.searchChunks, {
     searchQuery: queryVector,
@@ -42,12 +36,12 @@ export async function askDocQuestion(
     limit: 5, // adjust as needed
   });
 
-  // Step 4: Prepare context string
+  // Prepare context string
   const context = chunks
     .map((chunk, i) => `Chunk ${i + 1}:\n${chunk.record.text}`)
     .join("\n\n");
 
-  // Step 5: Stream response from Gemini
+  //Stream response from Gemini
   (async () => {
     const { textStream } = await streamText({
       model: google("gemini-2.0-flash-001"),
@@ -100,6 +94,12 @@ export async function generateSummary(docId: string, userId: string) {
     if (summary.trim().length < 0) {
       throw new Error("Can't generate summary! Try again later!");
     }
+
+    await convexClient.mutation(api.documents.addSummaryToDoc, {
+      bulletPointSummary: summary,
+      docId: docId as Id<"documents">,
+      userId,
+    });
 
     return {
       output: summary,

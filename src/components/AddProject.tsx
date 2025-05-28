@@ -98,7 +98,7 @@ export default function AddProject() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button className="cursor-pointer">
+        <Button className="cursor-pointer bg-purple-700 hover:bg-purple-800 dark:bg-purple-500 dark:hover:bg-purple-600">
           <PlusIcon suppressHydrationWarning />
           Add Project
         </Button>

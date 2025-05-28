@@ -15,11 +15,11 @@ export default function WelcomeProject() {
           </li>
           <li className="flex items-end gap-2">
             <span className="text-blue-500 dark:text-blue-400  mt-1">•</span>
-            <span>Searching through Your Project</span>
+            <span>Searching through Your Code</span>
           </li>
           <li className="flex items-end gap-2">
             <span className="text-blue-500 dark:text-blue-400  mt-1">•</span>
-            <span>Summarize a code file</span>
+            <span>Summarize the code file</span>
           </li>
           <li className="flex items-end gap-2">
             <span className="text-blue-500 dark:text-blue-400  mt-1">•</span>

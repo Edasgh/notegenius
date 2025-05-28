@@ -27,7 +27,7 @@ const FolderTree: React.FC<FolderTreeProps> = ({ files }) => {
   };
 
   return (
-    <ul className="pl-4 w-fit pb-1.5 flex flex-col justify-start items-start gap-2 font-mono text-xs md:text-sm">
+    <ul className="pl-4 w-fit pb-1.5 flex flex-col justify-start items-start gap-2 font-mono text-xs">
       {files.map((file) => (
         <li key={file._id}>
           <label className="break-all flex items-center gap-2 cursor-pointer hover:text-blue-500 dark:hover:text-blue-600">

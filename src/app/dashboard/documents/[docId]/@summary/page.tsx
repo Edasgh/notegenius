@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MDEditor from "@uiw/react-md-editor";
 import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
@@ -18,6 +18,7 @@ import {
 import { useQuery } from "convex/react";
 import { api } from "../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../convex/_generated/dataModel";
+import DocSummaryLoading from "./loading";
 
 const SummaryDoc = () => {
   const params = useParams<{ docId: string }>();
@@ -29,12 +30,16 @@ const SummaryDoc = () => {
   const [loading, setLoading] = useState(false);
   const [docSummary, setDocSummary] = useState("");
 
+  useEffect(() => {
+    if (currentDoc && currentDoc.bulletPointSummary) {
+      setDocSummary(currentDoc.bulletPointSummary);
+    }
+  }, [currentDoc]);
+
   if (!docId || currentDoc === null || currentDoc === undefined || !user) {
     return (
       <>
-        <div className="text-red-400 text-xl w-full py-4 px-5 border border-dashed border-red-400 text-center rounded-md">
-          You have no access to view this document
-        </div>
+        <DocSummaryLoading/>
       </>
     );
   }
@@ -50,6 +55,8 @@ const SummaryDoc = () => {
       toast.success("Summary generated!");
     } catch (error) {
       toast.error("Couldn't generate summary!");
+    }finally{
+      setLoading(false);
     }
   }
 

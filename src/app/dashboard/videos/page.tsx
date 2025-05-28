@@ -85,7 +85,7 @@ export default function Videos() {
     <main className="flex flex-col gap-4 justify-center items-start overflow-x-hidden">
       <div className="flex flex-wrap gap-3 w-full justify-between items-center">
         <p className="text-3xl font-semibold">My Videos</p>
-        <AddVideo/>
+        <AddVideo />
       </div>
       <div className="w-full mt-4 border border-gray-300 dark:border-gray-700" />
       {!user || videos === undefined || videos === null ? (
@@ -129,7 +129,7 @@ export default function Videos() {
                         style={{ overflowWrap: "anywhere" }}
                         className="text-lg font-semibold inline-flex whitespace-pre-wrap"
                       >
-                        {video.title}
+                        {video.title.slice(0,30)}..
                       </span>
                       <DeleteDialog
                         videoId={video._id}
@@ -139,12 +139,14 @@ export default function Videos() {
                     </div>
                   </div>
 
-                  <span
+                  <Link
+                    href={video.url}
+                    target="_blank"
                     style={{ overflowWrap: "anywhere" }}
-                    className="text-sm text-gray-600 dark:text-gray-400 inline-flex whitespace-pre-wrap"
+                    className="text-sm text-gray-600 dark:text-gray-400 inline-flex whitespace-pre-wrap hover:underline"
                   >
                     {video.url}
-                  </span>
+                  </Link>
                   <Link
                     href={`/dashboard/videos/${video._id}`}
                     className="mt-3 py-3 px-5 text-sm bg-black text-white dark:bg-white/95 dark:text-black rounded-lg flex gap-2 justify-center items-center"
