@@ -170,7 +170,30 @@ export default function Project() {
     !selectedFiles ||
     selectedFiles.length === 0
   ) {
-    return <ChatLoading />;
+    return (
+      <main className="py-2 flex flex-col gap-5 justify-start items-start">
+        <div className="flex max-[550px]:w-[280px] min-[551px]:w-full flex-col p-3 border border-gray-200 shadow-gray-200 dark:border-gray-600 dark:shadow-gray-600 shadow-md rounded-md h-screen">
+          <div className="block px-4 pb-3 border-b border-gray-100 dark:border-gray-700">
+            <div className="flex gap-2 justify-start items-start font-semibold text-gray-800 dark:text-gray-300">
+              <NotebookPenIcon className="w-5 h-5 md:w-8 md:h-8 text-purple-900 dark:text-purple-400" />
+              <span className="text-sm md:text-xl bg-gradient-to-r from-purple-900 dark:from-purple-500 to-purple-400/50 dark:to-purple-200 bg-clip-text text-transparent group-hover:bg-gradient-to-b transition-all duration-300">
+                Notes Bot
+              </span>
+            </div>
+          </div>
+
+          {/* Messages */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 h-full">
+            <div className="space-y-6">
+              <p className="text-sm text-gray-400">
+                Please select a file to continue
+              </p>
+              <WelcomeProject />
+            </div>
+          </div>
+        </div>
+      </main>
+    );
   }
 
   const copyText = (text: string) => {

@@ -29,6 +29,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import WelcomeVideo from "@/components/WelcomeVideo";
 
 
 export default function ChatVid() {
@@ -212,7 +213,7 @@ export default function ChatVid() {
               ))}
             </>
           ) : (
-            <WelcomeDoc />
+            <WelcomeVideo />
           )}
         </div>
         <div ref={msgRef} />

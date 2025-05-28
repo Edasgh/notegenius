@@ -19,7 +19,6 @@ import { api } from "../../../../../../convex/_generated/api";
 import { Id } from "../../../../../../convex/_generated/dataModel";
 import { useAppSelector } from "@/lib/store/hooks";
 import { generateCodeFileSummary } from "../actions";
-import ProjectSummaryLoading from "./loading";
 
 const SummaryProj = () => {
   const params = useParams<{ projId: string }>();
@@ -54,9 +53,16 @@ const SummaryProj = () => {
     !user
   ) {
     return (
-      <>
-        <ProjectSummaryLoading/>
-      </>
+      <div className="flex flex-col justify-start items-center p-3 pt-10 border border-gray-200 shadow-gray-200 dark:border-gray-600 dark:shadow-gray-600 shadow-md rounded-md h-screen">
+        <MDEditor.Markdown
+          source={"\n\n\n------\n\n\nPlease select a code file to generate summary!\n\n\n-----\n\n\n"}
+          style={{
+            backgroundColor: "#23203d",
+            color: "white",
+          }}
+          className={`p-3 border rounded-md shadow-md overflow-auto`}
+        />
+      </div>
     );
   }
 
@@ -138,7 +144,7 @@ const SummaryProj = () => {
                 Generate Summary
               </Button>
               <p className="text-sm text-gray-600 dark:text-gray-400">
-               Summarize the file : {selectedFiles[0].fileName}
+                Summarize the file : {selectedFiles[0].fileName}
               </p>
             </div>
           )}
