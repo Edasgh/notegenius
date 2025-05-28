@@ -3,6 +3,8 @@
 
 **Notegenius** is an all-in-one intelligent notes platform for students. Upload notes, summarize them, ask questions, extract insights from YouTube videos or GitHub repositories, and supercharge your learning with AI.
 
+[LIVE DEMO](https://notegenius-lovat.vercel.app/)
+
 ---
 
 ## ❓ Problem Statement
