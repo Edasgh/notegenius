@@ -8,90 +8,61 @@ const octokit = new Octokit({
   auth: process.env.GITHUB_TOKEN,
 });
 
+export async function embedCodeFile(doc: Document) {
+  const summary = await summarizeCode(doc);
+  if (summary.trim().length === 0) {
+    return {
+      error: "No summary generated!",
+    };
+  }
+  const embedding = await generateEmbedding(summary);
+  if (embedding === null || embedding === undefined) {
+    return {
+      error: "Couldn't generate embedding",
+    };
+  }
 
-export async function generateEmbeddings(docs: Document[]) {
-  // Define a set of file extensions to skip
-  const ignoredExtensions = new Set([
-    ".svg",
-    ".ico",
-    ".jpg",
-    ".jpeg",
-    ".wav",
-    ".webp",
-    ".png",
-    ".gif",
-    ".avif",
-    ".mp3",
-    ".mp4",
-    ".lock",
-    ".lockb",
-    ".gitignore",
-    ".env",
-    ".local",
-  ]);
+  if (embedding.length === 0) {
+    return {
+      error: "Couldn't generate embedding",
+    };
+  }
 
-  return await Promise.all(
-    docs
-      .filter((doc) => {
-        const fileName = doc.metadata.source.toLowerCase();
-
-        // Skip files with unwanted extensions or exact file matches
-        for (const ext of ignoredExtensions) {
-          if (fileName.endsWith(ext)) {
-            return false;
-          }
-        }
-
-        // Skip files with specific patterns (like -lock.json)
-        if (fileName.includes("-lock.json")) return false;
-
-        return true;
-      })
-      .map(async (doc) => {
-        const summary = await summarizeCode(doc);
-        if (summary.trim() === "") {
-          return {
-            summary,
-            sourceCode: JSON.parse(JSON.stringify(doc.pageContent)),
-            fileName: doc.metadata.source,
-          };
-        }
-        const embedding = await generateEmbedding(summary);
-        return {
-          summary,
-          embedding,
-          sourceCode: JSON.parse(JSON.stringify(doc.pageContent)),
-          fileName: doc.metadata.source,
-        };
-      })
-  );
+  return {
+    summary,
+    embedding,
+  };
 }
-
 
 export async function loadGithubRepo(
   githubUrl: string,
   branch: string,
   githubToken?: string
 ) {
-  const loader = new GithubRepoLoader(githubUrl, {
-   // accessToken: githubToken || process.env.GITHUB_TOKEN,
-    branch,
-    ignoreFiles: [
-      "package-lock.json",
-      "yarn.lock",
-      "pnpm-lock.yaml",
-      "bun.lockb",
-      "README.md",
-    ],
-    ignorePaths: [".gitignore", ".env", "favicon.ico"],
-    recursive: true,
-    unknown: "warn",
-    maxConcurrency: 5,
-  });
-  const docs = await loader.load();
-  return docs;
-}
+  try {
+    const loader = new GithubRepoLoader(githubUrl, {
+      accessToken: githubToken || process.env.GITHUB_TOKEN!,
+      branch,
+      ignoreFiles: [
+        "package-lock.json",
+        "yarn.lock",
+        "pnpm-lock.yaml",
+        "bun.lockb",
+        "README.md",
+      ],
+      ignorePaths: [".gitignore", ".env", "favicon.ico"],
+      recursive: true,
+      unknown: "warn",
+      maxConcurrency: 5,
+    });
 
+    const docs = await loader.load();
+    return docs;
+  } catch (error) {
+    console.error("Error loading GitHub repo:", error);
+    return [];
+  }
+}
 
 export async function githubRepoLoader(
   githubUrl: string,
@@ -114,3 +85,4 @@ export async function githubRepoLoader(
     console.log(file._links);
   }
 }
+

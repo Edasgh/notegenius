@@ -27,8 +27,8 @@ export const saveNote = mutation({
     //find existing Note
     const existingNote = await ctx.db
       .query("note")
-      .withIndex("by_user_and_title", (q) =>
-        q.eq("userId", args.userId).eq("title", args.title)
+      .withIndex("by_user_and_recordTitle", (q) =>
+        q.eq("userId", args.userId).eq("recordTitle", args.recordTitle)
       )
       .unique();
 
@@ -56,6 +56,36 @@ export const saveNote = mutation({
   },
 });
 
+
+export const updateNoteById = mutation({
+  args: {
+    noteId: v.id("note"),
+    userId: v.string(),
+    title: v.string(),
+    description: v.string(),
+    link: v.optional(v.string()),
+  },
+  async handler(ctx, args) {
+    const note = await ctx.db.get(args.noteId);
+    if (!note || note.userId !== args.userId) {
+      throw new Error("Unauthorized or note not found");
+    }
+
+    if (args.link !== undefined) {
+      await ctx.db.patch(args.noteId, {
+        title: args.title,
+        description: args.description,
+        link: args.link,
+      });
+    } else {
+      await ctx.db.patch(args.noteId, {
+        title: args.title,
+        description: args.description,
+      });
+    }
+  },
+});
+
 export const getNoteById = query({
   args: {
     userId: v.string(),
@@ -72,6 +102,21 @@ export const getNoteById = query({
     }
 
     return note;
+  },
+});
+
+export const getNotebyUserAndTitle = query({
+  args: {
+    userId: v.string(),
+    recordTitle: v.string(),
+  },
+  async handler(ctx, args) {
+    return await ctx.db
+      .query("note")
+      .withIndex("by_user_and_recordTitle", (q) =>
+        q.eq("userId", args.userId).eq("recordTitle", args.recordTitle)
+      )
+      .unique();
   },
 });
 

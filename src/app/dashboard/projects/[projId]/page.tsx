@@ -15,14 +15,23 @@ import WelcomeProject from "@/components/WelcomeProject";
 import { Doc, Id } from "../../../../../convex/_generated/dataModel";
 import { api } from "../../../../../convex/_generated/api";
 import { askProjQuestion } from "./actions";
+import { getConvexClient } from "@/lib/convex";
+import { toast } from "sonner";
 
 import {
   ChevronDownIcon,
+  CopyIcon,
+  Download,
   Loader2Icon,
-  MessageCircleMoreIcon,
   NotebookPenIcon,
   Send,
 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type fileRefference = {
   type: "sourceCodeEmbedding";
@@ -121,7 +130,7 @@ export default function Project() {
             fileName: file.record.fileName,
             projectId: file.record.projectId,
             sourceCode: file.record.sourceCode,
-            summary: file.record.summary,
+            bulletPointSummary: file.record.bulletPointSummary as string,
             userId: file.record.userId,
             summaryEmbedding: file.record.summaryEmbedding,
           },
@@ -145,6 +154,47 @@ export default function Project() {
       </div>
     );
   }
+
+  const copyText = (text: string) => {
+    navigator.clipboard.writeText(text);
+    toast.success("Copied to clipboard!");
+  };
+
+  const convex = getConvexClient();
+
+  const addMessageToNote = async (text: string, recordTitle: string) => {
+    try {
+      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
+        recordTitle,
+        userId: user.id,
+      });
+      if (existingNote !== undefined && existingNote !== null) {
+        if (existingNote.description.includes(text)) {
+          toast.error("Already added to note!");
+          return;
+        }
+
+        await convex.mutation(api.note.updateNoteById, {
+          description: `${existingNote.description}\n---\n${text}`,
+          title: existingNote.title,
+          noteId: existingNote._id,
+          userId: user.id,
+        });
+        toast.success("Added to note successfully!");
+      } else {
+        await convex.mutation(api.note.saveNote, {
+          link: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/projects/${projId}`,
+          description: text,
+          recordTitle: currentProject.name,
+          title: text.slice(0, 50),
+          userId: user.id,
+        });
+        toast.success("Added to note successfully!");
+      }
+    } catch (error) {
+      toast.error("Something went wrong!");
+    }
+  };
 
   return (
     <main className="py-2 flex flex-col gap-5 justify-start items-start">
@@ -178,6 +228,41 @@ export default function Project() {
                       }}
                       className={`${message.isHuman ? "w-fit py-4 px-5" : "w-full py-4 px-3"}  border rounded-md shadow-md overflow-auto`}
                     />
+                    {!message.isHuman && (
+                      <div className="flex gap-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger
+                              onClick={() => {
+                                copyText(message.text);
+                              }}
+                            >
+                              <CopyIcon className="cursor-pointer" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Copy to clipboard</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger
+                              onClick={() => {
+                                addMessageToNote(
+                                  message.text,
+                                  currentProject.name
+                                );
+                              }}
+                            >
+                              <Download className="cursor-pointer" />
+                            </TooltipTrigger>
+                            <TooltipContent>
+                              <p>Add to note</p>
+                            </TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </div>
+                    )}
                     {message.fileRefferences && (
                       <FileRefs
                         fileRefferences={

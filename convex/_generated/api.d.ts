@@ -20,6 +20,7 @@ import type * as note from "../note.js";
 import type * as project from "../project.js";
 import type * as sourceCodeEmbedding from "../sourceCodeEmbedding.js";
 import type * as storage from "../storage.js";
+import type * as video from "../video.js";
 
 /**
  * A utility for referencing Convex functions in your app's API.
@@ -37,6 +38,7 @@ declare const fullApi: ApiFromModules<{
   project: typeof project;
   sourceCodeEmbedding: typeof sourceCodeEmbedding;
   storage: typeof storage;
+  video: typeof video;
 }>;
 export declare const api: FilterApi<
   typeof fullApi,

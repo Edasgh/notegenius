@@ -28,6 +28,21 @@ export const insertChunk = mutation({
   },
 });
 
+export const getAllChunks = query({
+  args: {
+    userId: v.string(),
+    docId: v.id("documents"),
+  },
+  async handler(ctx, args) {
+    return await ctx.db
+      .query("documentsChunks")
+      .withIndex("by_docId_and_userId", (q) =>
+        q.eq("docId", args.docId).eq("userId", args.userId)
+      )
+      .collect();
+  },
+});
+
 export const searchChunks = action({
   args: {
     searchQuery: v.array(v.float64()),

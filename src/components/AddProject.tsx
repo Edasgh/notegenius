@@ -16,7 +16,7 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
-import { indexGithubRepo } from "@/app/actions/project-actions";
+import { indexGithubRepo } from "@/actions/project-actions";
 
 type ProjectInput = {
   project_title: string;

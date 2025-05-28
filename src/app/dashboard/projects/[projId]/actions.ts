@@ -2,7 +2,10 @@
 import { streamText } from "ai";
 import { createStreamableValue } from "ai/rsc";
 import { createGoogleGenerativeAI } from "@ai-sdk/google";
-import { generateEmbedding } from "@/lib/gemini";
+import {
+  generateEmbedding,
+  summarizeCodeInBulletPoints,
+} from "@/lib/gemini";
 import { getConvexClient } from "@/lib/convex";
 import { api } from "../../../../../convex/_generated/api";
 import { Doc, Id } from "../../../../../convex/_generated/dataModel";
@@ -45,7 +48,7 @@ export async function askProjQuestion(
   let context = ``;
 
   for (const doc of results) {
-    context += `source : ${doc.record.fileName}\n code: ${doc.record.sourceCode}\n summary of file : ${doc.record.summary}`;
+    context += `source : ${doc.record.fileName}\n code: ${doc.record.sourceCode}\n summary of file : ${doc.record.bulletPointSummary}`;
   }
 
   (async () => {
@@ -84,3 +87,50 @@ export async function askProjQuestion(
     fileRefferences: results,
   };
 }
+
+export async function generateCodeFileSummary(id: string, userId: string) {
+  try {
+    const codeFile = await convexClient.query(
+      api.sourceCodeEmbedding.getCodeEmbeddingById,
+      {
+        id: id as Id<"sourceCodeEmbedding">,
+      }
+    );
+    if (!codeFile || codeFile === undefined || codeFile === null) {
+      return {
+        output: "Sorry, this code file doesn't exist!",
+      };
+    }
+    const bulletPointSummary = await summarizeCodeInBulletPoints(
+      codeFile.sourceCode,
+      codeFile.fileName
+    );
+    if (bulletPointSummary.trim().length < 0) {
+      throw new Error("Can't generate summary! Try again later!");
+    }
+    const embedding = await generateEmbedding(bulletPointSummary);
+    if (!embedding) {
+      console.error("Can't generate embedding! Try again later!");
+      return {
+        summary: bulletPointSummary,
+      };
+    }
+
+    await convexClient.mutation(api.sourceCodeEmbedding.addEmbedding, {
+      id: id as Id<"sourceCodeEmbedding">,
+      userId,
+      bulletPointSummary,
+      summaryEmbedding: embedding,
+    });
+
+    return {
+      summary: bulletPointSummary,
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      error: "Something went wrong!",
+    };
+  }
+}
+

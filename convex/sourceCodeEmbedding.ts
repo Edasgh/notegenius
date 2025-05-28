@@ -17,20 +17,54 @@ export const saveCodeEmbedding = mutation({
     projectId: v.id("project"),
     sourceCode: v.string(),
     fileName: v.string(),
-    summary: v.string(),
+    bulletPointSummary: v.optional(v.string()),
     summaryEmbedding: v.optional(v.array(v.float64())),
   },
   handler: async (ctx, args) => {
     //create new source code embedding
-    const codeEmbeddingId = await ctx.db.insert("sourceCodeEmbedding", {
-      userId: args.userId,
-      projectId: args.projectId,
-      sourceCode: args.sourceCode,
-      fileName: args.fileName,
-      summary: args.summary,
-      summaryEmbedding: args.summaryEmbedding,
-    });
+    const codeEmbeddingId =
+      args.bulletPointSummary !== undefined
+        ? await ctx.db.insert("sourceCodeEmbedding", {
+            userId: args.userId,
+            projectId: args.projectId,
+            sourceCode: args.sourceCode,
+            fileName: args.fileName,
+            bulletPointSummary: args.bulletPointSummary,
+            summaryEmbedding: args.summaryEmbedding,
+          })
+        : await ctx.db.insert("sourceCodeEmbedding", {
+            userId: args.userId,
+            projectId: args.projectId,
+            sourceCode: args.sourceCode,
+            fileName: args.fileName,
+          });
     return codeEmbeddingId;
+  },
+});
+
+export const addEmbedding = mutation({
+  args: {
+    id: v.id("sourceCodeEmbedding"),
+    userId: v.string(),
+    bulletPointSummary: v.string(),
+    summaryEmbedding: v.optional(v.array(v.float64())),
+  },
+  async handler(ctx, args) {
+    const codeFile = await ctx.db.get(args.id);
+    if (!codeFile || codeFile.userId !== args.userId) {
+      throw new Error("Unauthorized or code file not found");
+    }
+
+    if (args.summaryEmbedding === undefined) {
+      await ctx.db.patch(args.id, {
+        bulletPointSummary: args.bulletPointSummary,
+      });
+    } else {
+      await ctx.db.patch(args.id, {
+        bulletPointSummary: args.bulletPointSummary,
+        summaryEmbedding: args.summaryEmbedding,
+      });
+    }
   },
 });
 

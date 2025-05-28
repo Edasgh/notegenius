@@ -5,7 +5,7 @@ import { mutation, query } from "./_generated/server";
 export const getAllMessages = query({
   args: {
     userId: v.string(),
-    recordId: v.union(v.id("project"), v.id("documents")),
+    recordId: v.union(v.id("project"), v.id("documents"),v.id("video")),
   },
   handler: async (ctx, args) => {
     return await ctx.db
@@ -21,7 +21,7 @@ export const getAllMessages = query({
 export const send = mutation({
   args: {
     userId: v.string(),
-    recordId: v.union(v.id("project"), v.id("documents")),
+    recordId: v.union(v.id("project"), v.id("documents"),v.id("video")),
     isAProject: v.boolean(),
     text: v.string(),
     isHuman: v.boolean(),
@@ -35,7 +35,7 @@ export const send = mutation({
             projectId: v.id("project"),
             sourceCode: v.string(),
             fileName: v.string(),
-            summary: v.string(),
+            bulletPointSummary: v.string(),
             summaryEmbedding: v.optional(v.array(v.float64())),
           }),
         })

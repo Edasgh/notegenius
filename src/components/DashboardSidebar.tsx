@@ -11,9 +11,12 @@ import {
 } from "@/components/ui/sidebar";
 import {
   FileTextIcon,
+  HomeIcon,
+  LayoutDashboard,
   PenIcon,
   SearchIcon,
   TerminalSquareIcon,
+  YoutubeIcon,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -30,10 +33,10 @@ export function DashboardSidebar() {
                 <SidebarMenuButton asChild>
                   <Link
                     className={`text-gray-700 dark:text-gray-50 ${pathName.includes("/search") && "bg-gray-200 dark:bg-gray-700"}`}
-                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/search`}
+                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard`}
                   >
-                    <SearchIcon />
-                    <span> Search </span>
+                    <LayoutDashboard />
+                    <span> Dashboard</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
@@ -44,12 +47,11 @@ export function DashboardSidebar() {
                     href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/documents`}
                   >
                     <FileTextIcon />
-                    {/* <span>Usage</span> */}
                     <span>My Documents</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
-              {/* <SidebarMenuItem>
+              <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link
                     className={`text-gray-700 dark:text-gray-50 ${pathName.includes("/notes") && "bg-gray-200 dark:bg-gray-700"}`}
@@ -59,19 +61,7 @@ export function DashboardSidebar() {
                     <span>My Notes</span>
                   </Link>
                 </SidebarMenuButton>
-              </SidebarMenuItem> */}
-              {/* <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
-                    className="text-gray-700 dark:text-gray-50"
-                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/tasks`}
-                  >
-                    <ListTodoIcon />
-                    <span>My Tasks</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem> */}
-
+              </SidebarMenuItem>
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link
@@ -80,6 +70,17 @@ export function DashboardSidebar() {
                   >
                     <TerminalSquareIcon />
                     <span>My Projects</span>
+                  </Link>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton asChild>
+                  <Link
+                    className={`text-gray-700 dark:text-gray-50 ${pathName.includes("/videos") && "bg-gray-200 dark:bg-gray-700"}`}
+                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/videos`}
+                  >
+                    <YoutubeIcon />
+                    <span>My Videos</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

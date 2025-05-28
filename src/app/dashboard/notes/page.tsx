@@ -1,10 +1,15 @@
 "use client";
-
-import { UploadDocument } from "@/components/UploadDocument";
 import { useMutation, useQuery } from "convex/react";
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { api } from "../../../../convex/_generated/api";
-import { Calendar1Icon, LucideEye, Trash2Icon } from "lucide-react";
+import {
+  Calendar1Icon,
+  Edit2Icon,
+  FileBoxIcon,
+  LucideEye,
+  SquareArrowOutUpRight,
+  Trash2Icon,
+} from "lucide-react";
 import Link from "next/link";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
@@ -20,7 +25,21 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Id } from "../../../../convex/_generated/dataModel";
-import AddNote from "@/components/AddNote";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+
+import MDEditor from "@uiw/react-md-editor";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
 function DeleteDialog({
   noteId,
@@ -33,7 +52,7 @@ function DeleteDialog({
 }) {
   const deleteHandler = useMutation(api.note.deleteNoteById);
   const handleDelete = async () => {
-    const deleteDoc = deleteHandler({
+    const deleteDoc = await deleteHandler({
       id: noteId,
       userId,
     })
@@ -57,11 +76,11 @@ function DeleteDialog({
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Are you sure to delete document : {docName} ?
+            Are you sure to delete note : {docName} ?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            document data from our servers.
+            This action cannot be undone. This will permanently delete your note
+            data from our servers.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -77,6 +96,175 @@ function DeleteDialog({
   );
 }
 
+export function EditNoteModal({
+  noteId,
+  userId,
+}: {
+  noteId: Id<"note">;
+  userId: string;
+}) {
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const note = useQuery(api.note.getNoteById, { noteId, userId });
+  const updateNote = useMutation(api.note.updateNoteById);
+
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [link, setLink] = useState("");
+
+  const handleUpdate = async () => {
+    if (!title.trim() || !description.trim()) {
+      toast.error("Title and description are required.");
+      return;
+    }
+
+    try {
+      await updateNote({
+        noteId,
+        userId,
+        title,
+        description,
+        link,
+      });
+      toast.success("Note updated successfully!");
+      if(btnRef.current){
+        btnRef.current.click();
+      }
+    } catch (error) {
+      console.error("Update note error:", error);
+      toast.error("Failed to update the note.");
+    }
+  };
+
+  // Pre-fill form once note is loaded
+  useEffect(() => {
+    if (note) {
+      setTitle(note.title);
+      setDescription(note.description);
+      setLink(note.link ?? "");
+    }
+  }, [note]);
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild suppressHydrationWarning>
+        <Edit2Icon className="w-6 h-6 cursor-pointer text-cyan-500" />
+      </DialogTrigger>
+      <DialogContent className="max-w-lg" suppressHydrationWarning>
+        <DialogHeader>
+          <DialogTitle>Edit Note</DialogTitle>
+          <DialogDescription>
+            Update your note title, description, or resource link.
+          </DialogDescription>
+        </DialogHeader>
+
+        <div className="space-y-4">
+          <p className="text-sm text-gray-700 dark:text-gray-400">Title</p>
+          <Input
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <p className="text-sm text-gray-700 dark:text-gray-400">
+            Description
+          </p>
+          <Textarea
+            placeholder="Description (Markdown supported)"
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            rows={6}
+          />
+          <p className="text-sm text-gray-700 dark:text-gray-400">Link</p>
+          <Input
+            placeholder="Optional Link"
+            value={link}
+            onChange={(e) => setLink(e.target.value)}
+          />
+        </div>
+
+        <DialogFooter className="mt-4">
+          <Button className="w-full" onClick={handleUpdate}>
+            Save Changes
+          </Button>
+          <DialogClose className="hidden" ref={btnRef} />
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+function ViewNoteModal({
+  noteId,
+  userId,
+}: {
+  noteId: Id<"note">;
+  userId: string;
+}) {
+  const Note = useQuery(api.note.getNoteById, {
+    noteId,
+    userId,
+  });
+
+  return (
+    <Dialog>
+      <DialogTrigger asChild suppressHydrationWarning>
+        <span className="py-3 px-5 text-sm bg-black text-white dark:bg-white/95 dark:text-black rounded-lg flex gap-2 justify-center items-center cursor-pointer">
+          <LucideEye className="w-4 h-4" suppressHydrationWarning />
+          View
+        </span>
+      </DialogTrigger>
+      {Note === null || Note === undefined ? (
+        <DialogContent
+          className="w-fit h-[500px] px-4"
+          suppressHydrationWarning
+        >
+          <DialogHeader>
+            <DialogTitle>Note</DialogTitle>
+            <DialogDescription>No Note to Show</DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      ) : (
+        <DialogContent
+          className="w-fit h-[500px] px-4"
+          suppressHydrationWarning
+        >
+          <DialogHeader>
+            <DialogTitle>{Note.title}</DialogTitle>
+            <DialogDescription>
+              {Note.link && (
+                <Link
+                  href={`${Note.link}`}
+                  target="_blank"
+                  title="visit link"
+                  className="hover:underline text-gray-500 break-all"
+                >
+                  {Note.link}
+                </Link>
+              )}
+            </DialogDescription>
+          </DialogHeader>
+          <p
+            className="text-sm break-words w-fit overflow-y-auto"
+            suppressHydrationWarning
+          >
+            <span className="text-gray-500 font-semibold underline">
+              Description:{" "}
+            </span>
+            <br />
+            <MDEditor.Markdown
+              source={Note.description}
+              style={{
+                backgroundColor: "#23203d",
+                color: "white",
+              }}
+              className={`py-4 px-5 border rounded-md shadow-md overflow-auto`}
+            />
+          </p>
+        </DialogContent>
+      )}
+    </Dialog>
+  );
+}
+
 export default function Notes() {
   const { user } = useUser();
   const docs = useQuery(api.note.getAllNotes);
@@ -84,8 +272,7 @@ export default function Notes() {
   return (
     <main className="flex flex-col gap-4 justify-center items-start">
       <div className="flex w-full justify-between items-center">
-        <p className="text-3xl font-semibold">My Notes</p>
-       <AddNote/>
+        <p className="text-2xl font-semibold">My Notes</p>
       </div>
       <div className="w-full mt-4 border border-gray-300 dark:border-gray-700" />
       {!user || docs === undefined || docs === null ? (
@@ -120,37 +307,53 @@ export default function Notes() {
                   className="flex gap-3 flex-col py-3 px-4 justify-start items-start rounded-lg border border-gray-400 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-blue-950/50 min-w-[200px] max-w-[280px]"
                 >
                   <div className="w-full flex flex-col gap-1 5 justify-start items-start">
-                    <span className="flex items-center gap-2 text-purple-800 dark:text-purple-300 text-xs">
-                      <Calendar1Icon className="text-purple-800 dark:text-purple-300 w-3 h-3" />
-                      {new Date(doc._creationTime).toLocaleDateString()}
-                    </span>
-                    <div className="flex w-full justify-between items-end">
+                    <div className="flex justify-between items-start w-full">
+                      <span className="flex items-center gap-2 text-purple-800 dark:text-purple-300 text-xs">
+                        <Calendar1Icon className="text-purple-800 dark:text-purple-300 w-3 h-3" />
+                        {new Date(doc._creationTime).toLocaleDateString()}
+                      </span>
+                      <span className="flex items-center gap-2 text-cyan-800 dark:text-cyan-300 text-xs">
+                        <FileBoxIcon className="text-cyan-800 dark:text-cyan-300 w-3 h-3" />
+                        <span className="font-semibold">
+                          {doc.recordTitle.slice(0, 15)}..
+                        </span>
+                      </span>
+                    </div>
+                    <div className="flex gap-1.5 w-full justify-between items-end">
                       <span
                         style={{ overflowWrap: "anywhere" }}
                         className="text-lg font-semibold inline-flex whitespace-pre-wrap"
                       >
-                        {doc.title}
+                        {doc.title.slice(0, 20)}..
                       </span>
                       <DeleteDialog
                         noteId={doc._id}
                         docName={doc.title}
                         userId={user?.id as string}
                       />
+                      <EditNoteModal noteId={doc._id} userId={user.id} />
                     </div>
                   </div>
                   <span
                     style={{ overflowWrap: "anywhere" }}
                     className="text-sm text-gray-600 dark:text-gray-400 inline-flex whitespace-pre-wrap"
                   >
-                    {doc.description}
+                    {doc.description.slice(0, 50)}
                   </span>
-                  <Link
-                    href={`/dashboard/documents/${doc._id}`}
-                    className="mt-3 py-3 px-5 text-sm bg-black text-white dark:bg-white/95 dark:text-black rounded-lg flex gap-2 justify-center items-center"
-                  >
-                    <LucideEye className="w-4 h-4" suppressHydrationWarning />
-                    View
-                  </Link>
+                  {doc.link && (
+                    <Link
+                      href={`${doc.link}`}
+                      className="text-sm hover:underline flex gap-2 justify-center items-center"
+                      target="_blank"
+                    >
+                      <SquareArrowOutUpRight
+                        className="w-4 h-4"
+                        suppressHydrationWarning
+                      />
+                      Visit link
+                    </Link>
+                  )}
+                  <ViewNoteModal noteId={doc._id} userId={user.id} />
                 </div>
               ))}
             </>

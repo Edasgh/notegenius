@@ -75,7 +75,7 @@ export default function Home() {
             <SignedIn>
               <Link
                 className="relative inline-flex gap-2 items-center justify-center px-8 py-3.5 text-base font-medium text-white bg-gradient-to-r from-gray-900 to-gray-800 dark:from-blue-950 dark:to-blue-700 rounded-full hover:from-gray-800 hover:to-gray-700 dark:hover:from-blue-900 dark:hover:to-blue-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5"
-                href={"/dashboard/search"}
+                href={"/dashboard"}
               >
                 Get Started <ArrowRight suppressHydrationWarning />
               </Link>

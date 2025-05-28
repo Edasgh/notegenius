@@ -41,7 +41,7 @@ export const storeDocument = mutation({
 
     // return doc id
     if (existingDoc) {
-      return existingDoc._id;
+      return null;
     }
 
     const docId = await ctx.db.insert("documents", {
@@ -72,7 +72,6 @@ export const getDocument = query({
   },
 });
 
-
 export const deleteDocById = mutation({
   args: {
     id: v.id("documents"),
@@ -93,5 +92,23 @@ export const deleteDocById = mutation({
     await ctx.db.delete(args.id);
 
     return true;
+  },
+});
+
+export const addSummaryToDoc = mutation({
+  args: {
+    docId: v.id("documents"),
+    userId: v.string(),
+    bulletPointSummary: v.string(),
+  },
+  async handler(ctx, args) {
+    const doc = await ctx.db.get(args.docId);
+    if (!doc || doc.userId !== args.userId) {
+      throw new Error("Unauthorized or doc not found");
+    }
+
+    await ctx.db.patch(args.docId, {
+      bulletPointSummary: args.bulletPointSummary,
+    });
   },
 });

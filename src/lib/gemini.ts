@@ -11,6 +11,64 @@ function chunkString(str: string, size: number) {
   return chunks;
 }
 
+export async function summarizeCodeInBulletPoints(sourceCode:string,fileName:string) {
+  const summarizeModel = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash-001",
+    systemInstruction: `
+    You are an expert AI software engineer helping a junior developer understand a code file.
+
+    Your job is to read small code snippets and generate 1–3 concise, beginner-friendly bullet points summarizing what that code does.
+
+    Be precise and avoid repetition. Format output like:
+    - Does X
+    - Implements Y
+    - Returns Z
+    `.trim(),
+  });
+
+  try {
+    const maxChunksPerRequest = 3;
+    const chunkSize = 200;
+
+    // Clean the code: remove comments and blank lines
+    const code = sourceCode
+      .replace(/\/\/.*|\/\*[\s\S]*?\*\//g, "")
+      .replace(/^\s*[\r\n]/gm, "");
+
+    const codeChunks = chunkString(code.trim().slice(0, 8000), chunkSize);
+
+    const chunkBatches = [];
+    for (let i = 0; i < codeChunks.length; i += maxChunksPerRequest) {
+      chunkBatches.push(codeChunks.slice(i, i + maxChunksPerRequest));
+    }
+
+    const summaries = [];
+    for (const batch of chunkBatches) {
+      try {
+        const prompt = `Summarize the following code from file "${fileName.trim()}" in bullet points:${batch.join("").trim()}`.trim();
+
+        const response = await summarizeModel.generateContent([prompt]);
+        summaries.push(response.response.text());
+      } catch (err) {
+        console.error("Error processing batch:", err);
+        continue;
+      }
+    }
+
+    // Clean up extra line breaks, join all batches
+    return summaries
+      .map((s) => s.trim())
+      .filter(Boolean)
+      .join("\n")
+      .replace(/\n{3,}/g, "\n\n");
+  } catch (error: any) {
+    if (error?.status === 429) {
+      console.error("Rate limit exceeded:", error);
+    }
+    return "";
+  }
+}
+
 export async function summarizeCode(doc: Document) {
   const summarizeModel = genAI.getGenerativeModel({
     model: "gemini-2.0-flash-001",
@@ -92,18 +150,24 @@ export async function summarizeDocument(docText: string) {
   }
 }
 
-export async function generateBulletSummary(docText: string) {
+export async function generateBulletPointSummary(docText: string) {
   const summarizeModel = genAI.getGenerativeModel({
     model: "gemini-2.0-flash-001",
-    systemInstruction: `You are a study assistant that converts educational content into well-structured, easy-to-understand bullet points.`,
+    systemInstruction: `You are an AI tutor that summarizes study material into clear bullet points. Each bullet point should be a key concept or idea. Optionally include sub-points or brief explanations to enhance understanding.`,
     generationConfig: {
       temperature: 0.7,
-      maxOutputTokens: 1800,
+      maxOutputTokens: 2000,
     },
   });
 
   try {
-    const prompt = `Convert the following study material into clear, descriptive bullet points that help students learn better. Each bullet point should capture a key idea, fact, or explanation. Use plain text formatting and make it easy to scan and remember:\n${docText}`;
+    const prompt = `ONLY Summarize the following document into bullet points for student learning.
+    Each bullet point should focus on one concept or topic. Add brief descriptions or sub-points where needed to explain the concept clearly.
+    Format:
+    - Main Point
+      - Sub-point or explanation
+
+    Text:\n${docText}`;
 
     const result = await summarizeModel.generateContent(prompt);
     return result.response.text();
@@ -116,6 +180,43 @@ export async function generateBulletSummary(docText: string) {
     return " ";
   }
 }
+
+
+export async function generateVideoBulletPointSummary(
+  transcriptText: string
+) {
+  const summarizeModel = genAI.getGenerativeModel({
+    model: "gemini-2.0-flash-001",
+    systemInstruction: `You are an AI tutor. Your job is to summarize educational YouTube videos into bullet points with optional sub-points or explanations, helping students understand the core concepts.`,
+    generationConfig: {
+      temperature: 0.7,
+      maxOutputTokens: 2000,
+    },
+  });
+
+  try {
+    const prompt = `ONLY Summarize the following YouTube video transcript into bullet points for students.
+    Each bullet point should capture a key topic or idea. Include brief descriptions or sub-points where useful for deeper understanding.
+
+    Format:
+    - Main Point
+      - Explanation or sub-point
+
+    Transcript:\n${transcriptText}`;
+
+    const result = await summarizeModel.generateContent(prompt);
+    return result.response.text();
+  } catch (error: any) {
+    if (error?.status === 429) {
+      console.error("Rate limit exceeded: ", error);
+    }
+
+    console.error("Gemini Video Summary error: ", error);
+    return " ";
+  }
+}
+
+
 
 export async function generateDocDescription(summary: string) {
   const descriptionGenrativeModel = genAI.getGenerativeModel({
