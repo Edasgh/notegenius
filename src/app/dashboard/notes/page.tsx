@@ -96,7 +96,7 @@ function DeleteDialog({
   );
 }
 
-export function EditNoteModal({
+function EditNoteModal({
   noteId,
   userId,
 }: {
