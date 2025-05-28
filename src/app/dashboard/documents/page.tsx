@@ -1,6 +1,6 @@
 "use client";
 
-import { UploadDocument } from "@/components/UploadDocument";
+import UploadDocument from "@/components/UploadDocument";
 import { useMutation, useQuery } from "convex/react";
 import React from "react";
 import { api } from "../../../../convex/_generated/api";
