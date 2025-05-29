@@ -57,10 +57,10 @@ export async function loadGithubRepo(
     });
 
     const docs = await loader.load();
-    return docs;
+    return {docs,success:"Docs loaded successfully!"};
   } catch (error) {
     console.error("Error loading GitHub repo:", error);
-    return [];
+    return {docs:[],error:"Something went Wrong!"}
   }
 }
 

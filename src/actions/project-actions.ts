@@ -13,24 +13,45 @@ export const indexGithubRepo = async (
   branch: string,
   githubToken?: string
 ) => {
-  console.log("Loading github repo");
-  //const data = await githubRepoLoader(githubUrl,githubToken);
-  const docs = await loadGithubRepo(githubUrl, branch, githubToken);
-  console.log("Loading files...");
-  await Promise.all(
-    docs.map(async (doc, index) => {
-      console.log(
-        `${index} . saving the file : ${doc.metadata.source.toLowerCase()}`
-      );
-      return await convexClient.mutation(
-        api.sourceCodeEmbedding.saveCodeEmbedding,
-        {
-          fileName: doc.metadata.source.toLowerCase(),
-          projectId: projectId as Id<"project">,
-          sourceCode: JSON.parse(JSON.stringify(doc.pageContent)),
-          userId,
-        }
-      );
-    })
-  );
+  try {
+    console.log("Loading github repo");
+    //const data = await githubRepoLoader(githubUrl,githubToken);
+    const { docs, success, error } = await loadGithubRepo(
+      githubUrl,
+      branch,
+      githubToken
+    );
+    if (!docs || docs.length === 0 || error) {
+      console.error("Repo loading failed:", error);
+      return {
+        error:"Repository could not be loaded or is empty.",
+      };
+    }
+
+    console.log("Loading files...");
+    await Promise.all(
+      docs.map(async (doc, index) => {
+        console.log(
+          `${index} . saving the file : ${doc.metadata.source.toLowerCase()}`
+        );
+        return await convexClient.mutation(
+          api.sourceCodeEmbedding.saveCodeEmbedding,
+          {
+            fileName: doc.metadata.source.toLowerCase(),
+            projectId: projectId as Id<"project">,
+            sourceCode: JSON.parse(JSON.stringify(doc.pageContent)),
+            userId,
+          }
+        );
+      })
+    );
+    return {
+      success: "Repository files loaded and saved successfully!",
+    };
+  } catch (err) {
+    console.error("Unexpected error in indexGithubRepo:", err);
+    return {
+      error:"An unexpected error occurred.",
+    };
+  }
 };

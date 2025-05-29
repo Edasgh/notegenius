@@ -26,6 +26,8 @@ type ProjectInput = {
   gh_token?: string;
 };
 
+const convex = getConvexClient();
+
 export default function AddProject() {
   const pathName = usePathname();
   const router = useRouter();
@@ -39,7 +41,6 @@ export default function AddProject() {
     branch: string,
     githubToken?: string
   ) {
-    const convex = getConvexClient();
     const projectId =
       githubToken !== undefined
         ? await convex.mutation(api.project.createProject, {
@@ -69,28 +70,44 @@ export default function AddProject() {
         data.branch,
         data.gh_token
       );
-      if (projectId !== null) {
-        await indexGithubRepo(
-          user.id,
-          projectId,
-          data.project_link,
-          data.branch,
-          data.gh_token
-        );
-
-        if (btnRef.current) {
-          btnRef.current.click();
-        }
-        toast.success("Project added successfully!");
-
-        router.push(`/dashboard/projects/${projectId}`);
-      } else {
+      if (projectId === null) {
         toast.error("Error : Project already exists.");
         if (btnRef.current) {
           btnRef.current.click();
         }
         reset();
+        return;
       }
+
+      const { error, success } = await indexGithubRepo(
+        user.id,
+        projectId,
+        data.project_link,
+        data.branch,
+        data.gh_token
+      );
+
+      if (error) {
+        // delete project if repo indexing fails
+        await convex.mutation(api.project.deleteProjectById, {
+          id: projectId,
+          userId: user.id,
+        });
+        toast.error(
+          "Error occurred while adding project. Please try again later."
+        );
+        if (btnRef.current) {
+          btnRef.current.click();
+        }
+        reset();
+        return;
+      }
+      //success
+      if (btnRef.current) {
+        btnRef.current.click();
+      }
+      toast.success("Project added successfully!");
+      router.push(`/dashboard/projects/${projectId}`);
     } catch (error) {
       toast.error(
         "Error occurred while adding project. Please try again later."
