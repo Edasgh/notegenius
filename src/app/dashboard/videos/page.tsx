@@ -20,6 +20,7 @@ import { useUser } from "@clerk/clerk-react";
 
 import { toast } from "sonner";
 import AddVideo from "@/components/AddVideo";
+import ViewRecordNoteModal from "@/components/ViewRecordNoteModal";
 
 function DeleteDialog({
   videoId,
@@ -129,7 +130,7 @@ export default function Videos() {
                         style={{ overflowWrap: "anywhere" }}
                         className="text-lg font-semibold inline-flex whitespace-pre-wrap"
                       >
-                        {video.title.slice(0,30)}..
+                        {video.title.slice(0, 30)}..
                       </span>
                       <DeleteDialog
                         videoId={video._id}
@@ -154,6 +155,12 @@ export default function Videos() {
                     <LucideEye className="w-4 h-4" suppressHydrationWarning />
                     View
                   </Link>
+                  <div className="w-full">
+                    <ViewRecordNoteModal
+                      recordId={video._id}
+                      userId={user.id}
+                    />
+                  </div>
                 </div>
               ))}
             </>

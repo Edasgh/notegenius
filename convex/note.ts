@@ -22,13 +22,14 @@ export const saveNote = mutation({
     link: v.optional(v.string()),
     userId: v.string(),
     recordTitle: v.string(),
+    recordId: v.union(v.id("project"), v.id("documents"), v.id("video")),
   },
   handler: async (ctx, args) => {
     //find existing Note
     const existingNote = await ctx.db
       .query("note")
-      .withIndex("by_user_and_recordTitle", (q) =>
-        q.eq("userId", args.userId).eq("recordTitle", args.recordTitle)
+      .withIndex("by_user_and_recordId", (q) =>
+        q.eq("userId", args.userId).eq("recordId", args.recordId)
       )
       .unique();
 
@@ -44,18 +45,19 @@ export const saveNote = mutation({
           userId: args.userId,
           link: args.link,
           recordTitle: args.recordTitle,
+          recordId: args.recordId,
         })
       : await ctx.db.insert("note", {
           title: args.title,
           description: args.description,
           userId: args.userId,
           recordTitle: args.recordTitle,
+          recordId: args.recordId,
         });
 
     return noteId;
   },
 });
-
 
 export const updateNoteById = mutation({
   args: {
@@ -105,16 +107,16 @@ export const getNoteById = query({
   },
 });
 
-export const getNotebyUserAndTitle = query({
+export const getNotebyUserAndRecord = query({
   args: {
     userId: v.string(),
-    recordTitle: v.string(),
+    recordId: v.union(v.id("project"), v.id("documents"), v.id("video")),
   },
   async handler(ctx, args) {
     return await ctx.db
       .query("note")
-      .withIndex("by_user_and_recordTitle", (q) =>
-        q.eq("userId", args.userId).eq("recordTitle", args.recordTitle)
+      .withIndex("by_user_and_recordId", (q) =>
+        q.eq("userId", args.userId).eq("recordId", args.recordId)
       )
       .unique();
   },

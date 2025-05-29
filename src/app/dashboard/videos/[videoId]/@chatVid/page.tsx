@@ -31,7 +31,6 @@ import {
 } from "@/components/ui/tooltip";
 import WelcomeVideo from "@/components/WelcomeVideo";
 
-
 export default function ChatVid() {
   const msgRef = useRef<HTMLDivElement>(null);
   const params = useParams<{ videoId: string }>();
@@ -46,7 +45,7 @@ export default function ChatVid() {
   const [answer, setAnswer] = useState("");
 
   const currentVideo = useQuery(api.video.getVideoById, {
-    videoRecordId:videoId as Id<"video">
+    videoRecordId: videoId as Id<"video">,
   });
 
   const messages = useQuery(api.messages.getAllMessages, {
@@ -72,7 +71,12 @@ export default function ChatVid() {
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setAnswer("");
     e.preventDefault();
-    if (!videoId || currentVideo === null || currentVideo === undefined || !user)
+    if (
+      !videoId ||
+      currentVideo === null ||
+      currentVideo === undefined ||
+      !user
+    )
       return;
     setLoading(true);
 
@@ -113,15 +117,14 @@ export default function ChatVid() {
 
   const convex = getConvexClient();
 
-  const addMessageToNote = async (text: string, recordTitle: string) => {
+  const addMessageToNote = async (text: string, recordId: string) => {
     try {
-      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
-        recordTitle,
+      const existingNote = await convex.query(api.note.getNotebyUserAndRecord, {
+        recordId: recordId as Id<"video">,
         userId: user.id,
       });
       if (existingNote !== undefined && existingNote !== null) {
-
-        if(existingNote.description.includes(text)){
+        if (existingNote.description.includes(text)) {
           toast.error("Already added to note!");
           return;
         }
@@ -138,6 +141,7 @@ export default function ChatVid() {
           link: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/videos/${videoId}`,
           description: text,
           recordTitle: currentVideo.title,
+          recordId: recordId as Id<"video">,
           title: text.slice(0, 50),
           userId: user.id,
         });
@@ -199,7 +203,7 @@ export default function ChatVid() {
                             onClick={() => {
                               addMessageToNote(
                                 `Question :\n${messages[index - 1].text}\n AI Answer :\n${message.text}`,
-                                currentVideo.title
+                                currentVideo._id as string
                               );
                             }}
                           >

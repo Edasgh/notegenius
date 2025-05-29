@@ -20,6 +20,7 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Id } from "../../../../convex/_generated/dataModel";
+import ViewRecordNoteModal from "@/components/ViewRecordNoteModal";
 
 function DeleteDialog({
   docId,
@@ -150,6 +151,9 @@ export default function Documents() {
                     <LucideEye className="w-4 h-4" suppressHydrationWarning />
                     View
                   </Link>
+                  <div className="w-full">
+                    <ViewRecordNoteModal recordId={doc._id} userId={user.id} />
+                  </div>
                 </div>
               ))}
             </>

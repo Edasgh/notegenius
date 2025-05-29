@@ -39,7 +39,7 @@ const SummaryDoc = () => {
   if (!docId || currentDoc === null || currentDoc === undefined || !user) {
     return (
       <>
-        <DocSummaryLoading/>
+        <DocSummaryLoading />
       </>
     );
   }
@@ -55,7 +55,7 @@ const SummaryDoc = () => {
       toast.success("Summary generated!");
     } catch (error) {
       toast.error("Couldn't generate summary!");
-    }finally{
+    } finally {
       setLoading(false);
     }
   }
@@ -67,10 +67,10 @@ const SummaryDoc = () => {
 
   const convex = getConvexClient();
 
-  const addSummaryToNote = async (text: string, recordTitle: string) => {
+  const addSummaryToNote = async (text: string, recordId: string) => {
     try {
-      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
-        recordTitle,
+      const existingNote = await convex.query(api.note.getNotebyUserAndRecord, {
+        recordId: recordId as Id<"documents">,
         userId: user?.id ?? "",
       });
       if (existingNote !== undefined && existingNote !== null) {
@@ -80,7 +80,7 @@ const SummaryDoc = () => {
         }
 
         await convex.mutation(api.note.updateNoteById, {
-          description: `${existingNote.description}\n---\n${text}`,
+          description: `${existingNote.description}\n---\n Summary : \n${text}`,
           title: existingNote.title,
           noteId: existingNote._id,
           userId: user.id,
@@ -91,6 +91,7 @@ const SummaryDoc = () => {
           link: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/documents/${docId}`,
           description: text,
           recordTitle: currentDoc.title,
+          recordId: recordId as Id<"documents">,
           title: text.slice(0, 50),
           userId: user.id,
         });
@@ -145,7 +146,7 @@ const SummaryDoc = () => {
               <Tooltip>
                 <TooltipTrigger
                   onClick={() => {
-                    addSummaryToNote(docSummary, currentDoc.title);
+                    addSummaryToNote(docSummary, currentDoc._id as string);
                   }}
                 >
                   <Download className="cursor-pointer" />

@@ -111,15 +111,14 @@ export default function ChatProj() {
 
   const convex = getConvexClient();
 
-  const addMessageToNote = async (text: string, recordTitle: string) => {
+  const addMessageToNote = async (text: string, recordId: string) => {
     try {
-      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
-        recordTitle,
+      const existingNote = await convex.query(api.note.getNotebyUserAndRecord, {
+        recordId: recordId as Id<"documents">,
         userId: user.id,
       });
       if (existingNote !== undefined && existingNote !== null) {
-
-        if(existingNote.description.includes(text)){
+        if (existingNote.description.includes(text)) {
           toast.error("Already added to note!");
           return;
         }
@@ -138,6 +137,7 @@ export default function ChatProj() {
           recordTitle: currentDoc.title,
           title: text.slice(0, 50),
           userId: user.id,
+          recordId: recordId as Id<"documents">,
         });
         toast.success("Added to note successfully!");
       }
@@ -196,8 +196,8 @@ export default function ChatProj() {
                           <TooltipTrigger
                             onClick={() => {
                               addMessageToNote(
-                                `Question :\n${messages[index-1].text}\n AI Answer :\n${message.text}`,
-                                currentDoc.title
+                                `Question :\n${messages[index - 1].text}\n AI Answer :\n${message.text}`,
+                                currentDoc._id as string
                               );
                             }}
                           >

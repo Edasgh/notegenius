@@ -77,10 +77,10 @@ export default function SummaryVideo() {
 
   const convex = getConvexClient();
 
-  const addSummaryToNote = async (text: string, recordTitle: string) => {
+  const addSummaryToNote = async (text: string, recordId: string) => {
     try {
-      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
-        recordTitle,
+      const existingNote = await convex.query(api.note.getNotebyUserAndRecord, {
+        recordId: recordId as Id<"video">,
         userId: user?.id ?? "",
       });
       if (existingNote !== undefined && existingNote !== null) {
@@ -90,7 +90,7 @@ export default function SummaryVideo() {
         }
 
         await convex.mutation(api.note.updateNoteById, {
-          description: `${existingNote.description}\n---\n${text}`,
+          description: `${existingNote.description}\n---\nSummary :\n${text}`,
           title: existingNote.title,
           noteId: existingNote._id,
           userId: user.id,
@@ -103,6 +103,7 @@ export default function SummaryVideo() {
           recordTitle: currentVideo.title,
           title: text.slice(0, 50),
           userId: user.id,
+          recordId: recordId as Id<"video">,
         });
 
         toast.success("Added to note successfully!");
@@ -158,7 +159,7 @@ export default function SummaryVideo() {
               <Tooltip>
                 <TooltipTrigger
                   onClick={() => {
-                    addSummaryToNote(videoSummary, currentVideo.title);
+                    addSummaryToNote(videoSummary, currentVideo._id as string);
                   }}
                 >
                   <Download className="cursor-pointer" />

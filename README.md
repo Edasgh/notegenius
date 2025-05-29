@@ -32,7 +32,7 @@ Students need a centralized, intelligent platform that not only stores their lea
 ### 🤖 AI Q&A
 - Ask questions about your uploaded notes
 - Select specific lines or text to get targeted answers
-- Chat interface powered by OpenAI or other LLMs
+- Get detailed answers from Gemini AI
 
 ### 🎥 YouTube Video Notes
 - Paste a YouTube video link
@@ -40,9 +40,9 @@ Students need a centralized, intelligent platform that not only stores their lea
 - Break content down by timestamps or topics
 
 ### 💻 GitHub Repository Q&A
-- Add any public GitHub repository
-- Ask questions about code, architecture, or specific files
-- Get summaries of complex functions or file structures
+- Add any public or private (access token required) GitHub repository
+- Ask questions about code or specific files
+- Get summaries of complex functions 
 
 ### 🔁 Study Tools (Upcoming features)
 - Flashcard generator from notes
@@ -57,7 +57,7 @@ Students need a centralized, intelligent platform that not only stores their lea
 | Layer        | Technology                               |
 |--------------|------------------------------------------|
 | Frontend     | Next.js, Shadcn UI, Tailwind CSS         |
-| Backend      | Node.js, Express (or Next API)           |
+| Backend      | Next API                                 |
 | AI Services  | Gemini API, LangChain                    |
 | File Storage | Convex Cloud Storage                     |
 | Vector DB    | Convex                                   |
@@ -86,10 +86,23 @@ yarn install
 Create a `.env.local` file:
 
 ```env
-GEMINI_API_KEY=your-gemini-key
-NEXT_PUBLIC_CONVEX_URL=your-convex-url
-CONVEX_DEPLOYMENT=your-convex-deployment
+CONVEX_DEPLOYMENT=convex-deployment 
+NEXT_PUBLIC_CONVEX_URL=convex-url
+
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=clerk-publishable-key
+CLERK_SECRET_KEY=clerk-secret-key
+ISSUER_URL=clerk-issuer-url
+
+#github
 GITHUB_TOKEN=your-github-token
+
+#gemini
+GEMINI_API_KEY=your-gemini-api-key
+
+# Youtube api key
+YOUTUBE_API_KEY=your-youtube-api-key
+
+NEXT_PUBLIC_BASE_URL="http://localhost:3000"
 ```
 
 ### 4. Run the app
@@ -109,7 +122,6 @@ Visit `http://localhost:3000`
 /pages           – Next.js routes
 /lib             – Utility functions and API wrappers
 /app/api         – Server actions and file processing
-/styles          – Tailwind styles
 /public          – Static assets
 ```
 
@@ -132,7 +144,7 @@ MIT License
 * [GEMINI](https://gemini.google.com)
 * [LangChain](https://www.langchain.com)
 * [Convex](https://www.convex.dev)
-* [YouTube Transcript API](https://rapidapi.com/)
+* [YouTube Transcript API](https://developers.google.com/youtube/v3/docs/captions)
 
 ---
 

@@ -20,6 +20,7 @@ import { Id } from "../../../../convex/_generated/dataModel";
 import { useUser } from "@clerk/clerk-react";
 
 import { toast } from "sonner";
+import ViewRecordNoteModal from "@/components/ViewRecordNoteModal";
 
 function DeleteDialog({
   projectId,
@@ -152,6 +153,12 @@ export default function Projects() {
                     <LucideEye className="w-4 h-4" suppressHydrationWarning />
                     View
                   </Link>
+                  <div className="w-full">
+                    <ViewRecordNoteModal
+                      recordId={project._id}
+                      userId={user.id}
+                    />
+                  </div>
                 </div>
               ))}
             </>

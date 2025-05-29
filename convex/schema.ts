@@ -88,9 +88,10 @@ export default defineSchema({
     link: v.optional(v.string()),
     description: v.string(),
     recordTitle: v.string(),
+    recordId: v.union(v.id("project"), v.id("documents"), v.id("video")),
   })
     .index("by_user_id", ["userId"])
-    .index("by_user_and_recordTitle", ["userId", "recordTitle"]),
+    .index("by_user_and_recordId", ["userId", "recordId"]),
   video: defineTable({
     userId: v.string(),
     videoId: v.string(),

@@ -55,7 +55,9 @@ const SummaryProj = () => {
     return (
       <div className="flex flex-col justify-start items-center p-3 pt-10 border border-gray-200 shadow-gray-200 dark:border-gray-600 dark:shadow-gray-600 shadow-md rounded-md h-screen">
         <MDEditor.Markdown
-          source={"\n\n\n------\n\n\nPlease select a code file to generate summary!\n\n\n-----\n\n\n"}
+          source={
+            "\n\n\n------\n\n\nPlease select a code file to generate summary!\n\n\n-----\n\n\n"
+          }
           style={{
             backgroundColor: "#23203d",
             color: "white",
@@ -92,10 +94,14 @@ const SummaryProj = () => {
 
   const convex = getConvexClient();
 
-  const addSummaryToNote = async (text: string, recordTitle: string) => {
+  const addSummaryToNote = async (
+    text: string,
+    recordId: string,
+    recordTitle: string
+  ) => {
     try {
-      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
-        recordTitle,
+      const existingNote = await convex.query(api.note.getNotebyUserAndRecord, {
+        recordId: recordId as Id<"project">,
         userId: user?.id ?? "",
       });
       if (existingNote !== undefined && existingNote !== null) {
@@ -105,7 +111,7 @@ const SummaryProj = () => {
         }
 
         await convex.mutation(api.note.updateNoteById, {
-          description: `${existingNote.description}\n---\n${text}`,
+          description: `${existingNote.description}\n---\nSummary of ${recordTitle} :\n${text}`,
           title: existingNote.title,
           noteId: existingNote._id,
           userId: user.id,
@@ -118,6 +124,7 @@ const SummaryProj = () => {
           recordTitle: currentProject.name,
           title: text.slice(0, 50),
           userId: user.id,
+          recordId: recordId as Id<"project">,
         });
 
         toast.success("Added to note successfully!");
@@ -178,7 +185,11 @@ const SummaryProj = () => {
               <Tooltip>
                 <TooltipTrigger
                   onClick={() => {
-                    addSummaryToNote(codeFileSummary, currentProject.name);
+                    addSummaryToNote(
+                      codeFileSummary,
+                      currentProject._id as string,
+                      selectedFiles[0].fileName
+                    );
                   }}
                 >
                   <Download className="cursor-pointer" />

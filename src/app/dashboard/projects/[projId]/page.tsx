@@ -203,10 +203,10 @@ export default function Project() {
 
   const convex = getConvexClient();
 
-  const addMessageToNote = async (text: string, recordTitle: string) => {
+  const addMessageToNote = async (text: string, recordId: string) => {
     try {
-      const existingNote = await convex.query(api.note.getNotebyUserAndTitle, {
-        recordTitle,
+      const existingNote = await convex.query(api.note.getNotebyUserAndRecord, {
+        recordId: recordId as Id<"project">,
         userId: user.id,
       });
       if (existingNote !== undefined && existingNote !== null) {
@@ -229,6 +229,7 @@ export default function Project() {
           recordTitle: currentProject.name,
           title: text.slice(0, 50),
           userId: user.id,
+          recordId: recordId as Id<"project">,
         });
         toast.success("Added to note successfully!");
       }
@@ -254,7 +255,7 @@ export default function Project() {
           <div className="space-y-6">
             {messages.length !== 0 ? (
               <>
-                {messages.map((message,index) => (
+                {messages.map((message, index) => (
                   <div
                     key={message._id}
                     className={`w-full flex flex-col gap-2`}
@@ -290,8 +291,8 @@ export default function Project() {
                             <TooltipTrigger
                               onClick={() => {
                                 addMessageToNote(
-                                  `Question :\n${messages[index-1].text}\n AI Answer :\n${message.text}`,
-                                  currentProject.name
+                                  `Question :\n${messages[index - 1].text}\n AI Answer :\n${message.text}`,
+                                  currentProject._id as string
                                 );
                               }}
                             >
