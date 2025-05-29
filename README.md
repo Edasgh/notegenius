@@ -25,7 +25,7 @@ Students need a centralized, intelligent platform that not only stores their lea
 
 ### 📄 Notes Upload & Summarization
 - Upload files (PDF, DOCX, TXT)
-- Automatically generate concise, bullet-point, or detailed summaries
+- Generate concise, bullet-point, or detailed summaries
 - Highlight important sections with AI assistance
 - Export to PDF
 
