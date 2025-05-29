@@ -145,6 +145,8 @@ MIT License
 * [LangChain](https://www.langchain.com)
 * [Convex](https://www.convex.dev)
 * [YouTube Transcript API](https://developers.google.com/youtube/v3/docs/captions)
+* [Magicpattern](https://www.magicpattern.design/)
+* [GIPHY](https://giphy.com/)
 
 ---
 
