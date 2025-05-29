@@ -6,6 +6,7 @@ import {
   ArrowRight,
   BookOpenCheck,
   Brain,
+  Sparkles,
   UploadCloudIcon,
   WandSparkles,
 } from "lucide-react";
@@ -52,14 +53,14 @@ const steps = [
 export default function Home() {
   return (
     <div className="min-h-screen">
-      <Header/>
+      <Header />
       {/* Hero Section */}
       <section className="py-24 w-full magicpattern">
         <div className="mx-auto pt-4">
           <div className="flex flex-col items-center gap-10 text-center mb-12">
             <div className="flex gap-3 justify-center items-center py-1 bg-purple-200/50 dark:bg-purple-900/60 px-7 rounded-2xl text-purple-800 dark:text-purple-300 border border-purple-500">
-              <WandSparkles className="w-5 h-5 text-purple-800 dark:text-purple-300 animate-pulse duration-[1.2s]" />{" "}
-              AI Powered Study Assistant
+              <Sparkles className="w-5 h-5 text-purple-800 dark:text-purple-300 animate-pulse duration-[1.2s]" />{" "}
+              All-in-One AI Notes Companion ✨
             </div>
             <h1 className="text-4xl md:text-7xl font-bold text-gray-900 dark:text-gray-400 mb-6 group cursor-default">
               Explore&nbsp;
@@ -68,9 +69,9 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-xl text-gray-900 dark:text-gray-400 mb-8 max-w-xl mx-auto">
-              Upload study materials, summarize key points, ask questions, and generate
-              insights from documents, YouTube videos, or GitHub repos—all in
-              one place.
+              Upload study materials, summarize key points, ask questions, and
+              generate insights from documents, YouTube videos, or GitHub
+              repos—all in one place.
             </p>
             <SignedIn>
               <Link
