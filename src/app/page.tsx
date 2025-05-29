@@ -59,7 +59,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-10 text-center mb-12">
             <div className="flex gap-3 justify-center items-center py-1 bg-purple-200/50 dark:bg-purple-900/60 px-7 rounded-2xl text-purple-800 dark:text-purple-300 border border-purple-500">
               <WandSparkles className="w-5 h-5 text-purple-800 dark:text-purple-300 animate-pulse duration-[1.2s]" />{" "}
-              AI Powered Notes Summarizer
+              AI Powered Study Material Summarizer
             </div>
             <h1 className="text-4xl md:text-7xl font-bold text-gray-900 dark:text-gray-400 mb-6 group cursor-default">
               Explore&nbsp;
