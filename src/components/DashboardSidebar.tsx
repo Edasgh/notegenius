@@ -11,8 +11,8 @@ import {
 } from "@/components/ui/sidebar";
 import {
   FileTextIcon,
+  GithubIcon,
   LayoutDashboard,
-  TerminalSquareIcon,
   YoutubeIcon,
 } from "lucide-react";
 import Link from "next/link";
@@ -54,8 +54,8 @@ export default function DashboardSidebar() {
                     className={`text-gray-700 dark:text-gray-50 ${pathName.includes("/projects") && "bg-gray-200 dark:bg-gray-700"}`}
                     href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/projects`}
                   >
-                    <TerminalSquareIcon />
-                    <span>My Projects</span>
+                    <GithubIcon />
+                    <span>My Repos</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

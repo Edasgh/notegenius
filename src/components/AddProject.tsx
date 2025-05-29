@@ -105,12 +105,12 @@ export default function AddProject() {
       <DialogTrigger asChild>
         <Button className="cursor-pointer bg-purple-700 hover:bg-purple-800 dark:bg-purple-500 dark:hover:bg-purple-600">
           <PlusIcon suppressHydrationWarning />
-          Add Project
+          Add Github Repo
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add a Project</DialogTitle>
+          <DialogTitle>Add a Github Repo</DialogTitle>
         </DialogHeader>
         <form
           onSubmit={handleSubmit(onSubmit)}
