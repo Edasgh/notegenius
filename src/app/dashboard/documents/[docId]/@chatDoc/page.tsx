@@ -195,7 +195,10 @@ export default function ChatProj() {
                         <Tooltip>
                           <TooltipTrigger
                             onClick={() => {
-                              addMessageToNote(message.text, currentDoc.title);
+                              addMessageToNote(
+                                `Question :\n${messages[index-1].text}\n AI Answer :\n${message.text}`,
+                                currentDoc.title
+                              );
                             }}
                           >
                             <Download className="cursor-pointer" />

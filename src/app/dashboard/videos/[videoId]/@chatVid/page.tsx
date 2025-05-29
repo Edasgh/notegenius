@@ -197,7 +197,10 @@ export default function ChatVid() {
                         <Tooltip>
                           <TooltipTrigger
                             onClick={() => {
-                              addMessageToNote(message.text, currentVideo.title);
+                              addMessageToNote(
+                                `Question :\n${messages[index - 1].text}\n AI Answer :\n${message.text}`,
+                                currentVideo.title
+                              );
                             }}
                           >
                             <Download className="cursor-pointer" />

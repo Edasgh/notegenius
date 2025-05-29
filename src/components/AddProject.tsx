@@ -17,6 +17,7 @@ import { useForm } from "react-hook-form";
 import { api } from "../../convex/_generated/api";
 import { toast } from "sonner";
 import { indexGithubRepo } from "@/actions/project-actions";
+import { usePathname, useRouter } from "next/navigation";
 
 type ProjectInput = {
   project_title: string;
@@ -26,6 +27,8 @@ type ProjectInput = {
 };
 
 export default function AddProject() {
+  const pathName = usePathname();
+  const router = useRouter();
   const { user } = useUser();
   const btnRef = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, reset, formState } = useForm<ProjectInput>();
@@ -79,6 +82,12 @@ export default function AddProject() {
           btnRef.current.click();
         }
         toast.success("Project added successfully!");
+        if(pathName.includes("/projects")){
+          router.push(`/${projectId}`)
+        }else{
+          router.push(`/projects/${projectId}`);
+        }
+
       } else {
         toast.error("Error : Project already exists.");
         if (btnRef.current) {

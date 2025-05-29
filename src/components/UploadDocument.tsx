@@ -14,6 +14,7 @@ import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { useUser } from "@clerk/clerk-react";
 import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
 
 type DocumentInput = {
   document_title: string;
@@ -21,6 +22,8 @@ type DocumentInput = {
 };
 
 export default function UploadDocument() {
+   const pathName = usePathname();
+    const router = useRouter();
   const { user } = useUser();
   const btnRef = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, reset, formState } = useForm<DocumentInput>();
@@ -72,6 +75,16 @@ export default function UploadDocument() {
     if (storeDoc.status === 200 && btnRef.current) {
       btnRef.current.click();
       toast.success("Document uploaded successfully!");
+      const { message, docRecordId } = await storeDoc.json();
+      if (docRecordId) {
+        if (pathName.includes("/documents")) {
+          router.push(`/${docRecordId}`);
+        } else {
+          router.push(`/documents/${docRecordId}`);
+        }
+      } else {
+        return;
+      }
       return;
     }
   }

@@ -58,6 +58,7 @@ export async function POST(req: Request): Promise<Response> {
     return NextResponse.json(
       {
         message: `Video : ${videoDetails.title} Added!`,
+        videoId,
       },
       { status: 200 }
     );

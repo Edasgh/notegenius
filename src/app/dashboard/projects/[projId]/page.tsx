@@ -254,7 +254,7 @@ export default function Project() {
           <div className="space-y-6">
             {messages.length !== 0 ? (
               <>
-                {messages.map((message) => (
+                {messages.map((message,index) => (
                   <div
                     key={message._id}
                     className={`w-full flex flex-col gap-2`}
@@ -290,7 +290,7 @@ export default function Project() {
                             <TooltipTrigger
                               onClick={() => {
                                 addMessageToNote(
-                                  message.text,
+                                  `Question :\n${messages[index-1].text}\n AI Answer :\n${message.text}`,
                                   currentProject.name
                                 );
                               }}

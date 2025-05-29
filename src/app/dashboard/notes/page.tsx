@@ -47,6 +47,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { marked } from "marked";
 
 function DeleteDialog({
   noteId,
@@ -210,8 +211,6 @@ function ViewNoteModal({
   const isLoading = note === undefined;
   const notFound = note === null;
 
-  const exportRef = useRef<HTMLDivElement>(null);
-
   const [html2pdfInstance, setHtml2pdfInstance] = useState<any>(null);
 
   useEffect(() => {
@@ -222,7 +221,14 @@ function ViewNoteModal({
   }, []);
 
   const handleExportPDF = () => {
-    if (!exportRef.current || !html2pdfInstance || !note) return;
+    if (!html2pdfInstance || !note) return;
+
+    const htmlContent = `<div style="font-family: Arial, sans-serif; padding: 20px;">
+      <h1 style="font-size: 24px;">${note.title}</h1>
+      ${note.link ? `<p><strong>Link:</strong> <a href="${note.link}">${note.link}</a></p>` : ""}
+      <hr />
+      <div>${marked(note.description)}</div>
+    </div>`;
 
     const opt: any = {
       margin: 0.5,
@@ -232,7 +238,7 @@ function ViewNoteModal({
       jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
     };
 
-    html2pdfInstance().set(opt).from(exportRef.current).save();
+    html2pdfInstance().set(opt).from(htmlContent).save();
   };
 
   return (
@@ -273,7 +279,10 @@ function ViewNoteModal({
             <div className="flex justify-end mb-2">
               <TooltipProvider>
                 <Tooltip>
-                  <TooltipTrigger className="border-none outline-none" onClick={handleExportPDF}>
+                  <TooltipTrigger
+                    className="border-none outline-none"
+                    onClick={handleExportPDF}
+                  >
                     <Download className="cursor-pointer" />
                   </TooltipTrigger>
                   <TooltipContent>
@@ -287,16 +296,15 @@ function ViewNoteModal({
               <h2 className="text-lg font-semibold text-gray-500">
                 Description:
               </h2>
-              <div ref={exportRef}>
-                <MDEditor.Markdown
-                  source={note.description}
-                  style={{
-                    backgroundColor: "#23203d",
-                    color: "white",
-                  }}
-                  className="py-4 px-5 border rounded-md shadow-md markdown-preview"
-                />
-              </div>
+
+              <MDEditor.Markdown
+                source={note.description}
+                style={{
+                  backgroundColor: "#23203d",
+                  color: "white",
+                }}
+                className="py-4 px-5 border rounded-md shadow-md markdown-preview"
+              />
             </div>
           </div>
         )}

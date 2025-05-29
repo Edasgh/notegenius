@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Loader2Icon, PlusIcon } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useRef } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -19,6 +20,8 @@ type Video_Input = {
 };
 
 export default function AddVideo() {
+  const pathName = usePathname();
+  const router = useRouter();
   const btnRef = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, reset, formState } = useForm<Video_Input>();
 
@@ -45,7 +48,16 @@ export default function AddVideo() {
         btnRef.current.click();
       }
       reset();
-      return;
+      const { message, videoId } = await response.json();
+      if (videoId) {
+        if (pathName.includes("/videos")) {
+          router.push(`/${videoId}`);
+        } else {
+          router.push(`/videos/${videoId}`);
+        }
+      } else {
+        return;
+      }
     } catch (error: any) {
       console.error("Upload error:", error.message);
       toast.error("Error : Something went wrong!.");

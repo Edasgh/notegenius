@@ -57,6 +57,7 @@ export async function POST(req: Request): Promise<Response> {
     const document_file = formData.get("document_file") as File | null;
     const document_title = formData.get("document_title") as string | null;
     const file_type = formData.get("file_type") as string | null;
+    let docRecordId;
 
     if (!document_file || !document_title || !file_type) {
       return NextResponse.json(
@@ -143,6 +144,7 @@ export async function POST(req: Request): Promise<Response> {
       }
 
       console.log(resp.message);
+      docRecordId=storedDoc;
     } else if (
       file_type === "txt" ||
       file_type === "csv" ||
@@ -181,6 +183,7 @@ export async function POST(req: Request): Promise<Response> {
       }
 
       console.log(resp.message);
+      docRecordId = storedDoc;
     } else if (file_type === "xlsx" || file_type === "xls") {
       const { data } = await generateExcelFileSummary(fileUrl);
       if (!data || data === null) {
@@ -215,6 +218,7 @@ export async function POST(req: Request): Promise<Response> {
       }
 
       console.log(resp.message);
+      docRecordId = storedDoc;
     } else if (file_type === "docx") {
       const { data } = await generateDocxFileSummary(fileUrl);
       // console.log("Data ",data);
@@ -250,12 +254,14 @@ export async function POST(req: Request): Promise<Response> {
       }
 
       console.log(resp.message);
+      docRecordId = storedDoc;
     }
 
     // Return a successful response
     return NextResponse.json(
       {
         message: `${document_title} file uploaded!`,
+        docRecordId:`${docRecordId}`
       },
       { status: 200 }
     );
