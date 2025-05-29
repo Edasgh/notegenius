@@ -84,7 +84,7 @@ export default function Home() {
               <SignInButton
                 mode="modal"
                 fallbackRedirectUrl={"/"}
-                forceRedirectUrl={"/"}
+                forceRedirectUrl={"/dashboard"}
               >
                 <button className="group cursor-pointer relative inline-flex items-center justify-center px-8 py-3.5 text-base font-medium text-white dark:text-gray-200 bg-gradient-to-r from-gray-900 to-gray-800 dark:from-indigo-950 dark:to-indigo-700 rounded-full hover:from-gray-800 hover:to-gray-700 dark:hover:from-indigo-900 dark:hover:to-indigo-600 transition-all duration-200 shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                   Get Started
