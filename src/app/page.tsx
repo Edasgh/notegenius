@@ -68,7 +68,7 @@ export default function Home() {
               </span>
             </h1>
             <p className="text-xl text-gray-900 dark:text-gray-400 mb-8 max-w-xl mx-auto">
-              Upload notes, summarize key points, ask questions, and generate
+              Upload study materials, summarize key points, ask questions, and generate
               insights from documents, YouTube videos, or GitHub repos—all in
               one place.
             </p>
