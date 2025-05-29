@@ -22,8 +22,8 @@ type DocumentInput = {
 };
 
 export default function UploadDocument() {
-   const pathName = usePathname();
-    const router = useRouter();
+  const pathName = usePathname();
+  const router = useRouter();
   const { user } = useUser();
   const btnRef = useRef<HTMLButtonElement>(null);
   const { register, handleSubmit, reset, formState } = useForm<DocumentInput>();
@@ -77,11 +77,7 @@ export default function UploadDocument() {
       toast.success("Document uploaded successfully!");
       const { message, docRecordId } = await storeDoc.json();
       if (docRecordId) {
-        if (pathName.includes("/documents")) {
-          router.push(`/${docRecordId}`);
-        } else {
-          router.push(`/documents/${docRecordId}`);
-        }
+        router.push(`/dashboard/documents/${docRecordId}`);
       } else {
         return;
       }

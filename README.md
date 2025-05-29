@@ -28,6 +28,7 @@ Students need a centralized, intelligent platform that not only stores their lea
 - Generate concise, bullet-point, or detailed summaries
 - Highlight important sections with AI assistance
 - Export to PDF
+- Quiz generator (from notes) (MCQs or short answers)
 
 ### 🤖 AI Q&A
 - Ask questions about your uploaded notes
@@ -46,7 +47,6 @@ Students need a centralized, intelligent platform that not only stores their lea
 
 ### 🔁 Study Tools (Upcoming features)
 - Flashcard generator from notes
-- Quiz generator (MCQs or short answers)
 - Study planner and progress tracker
 - Export to DOCX, or Anki
 

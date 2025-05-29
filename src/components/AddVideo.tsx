@@ -50,11 +50,7 @@ export default function AddVideo() {
       reset();
       const { message, videoId } = await response.json();
       if (videoId) {
-        if (pathName.includes("/videos")) {
-          router.push(`/${videoId}`);
-        } else {
-          router.push(`/videos/${videoId}`);
-        }
+        router.push(`/dashboard/videos/${videoId}`);
       } else {
         return;
       }

@@ -82,12 +82,8 @@ export default function AddProject() {
           btnRef.current.click();
         }
         toast.success("Project added successfully!");
-        if(pathName.includes("/projects")){
-          router.push(`/${projectId}`)
-        }else{
-          router.push(`/projects/${projectId}`);
-        }
 
+        router.push(`/dashboard/projects/${projectId}`);
       } else {
         toast.error("Error : Project already exists.");
         if (btnRef.current) {

@@ -48,6 +48,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { marked } from "marked";
+import { QuizModal } from "@/components/QuizModal";
 
 function DeleteDialog({
   noteId,
@@ -65,10 +66,10 @@ function DeleteDialog({
       userId,
     })
       .then(() => {
-        toast.success("Document deleted successfully!");
+        toast.success("Note deleted successfully!");
       })
       .catch((error) => {
-        console.log("Error deleting document : ", error);
+        console.log("Error deleting note : ", error);
         toast.error("Something went wrong! Try again later.");
       });
   };
@@ -276,7 +277,8 @@ function ViewNoteModal({
         </DialogHeader>
         {!isLoading && !notFound && (
           <div className="text-sm break-words w-full overflow-y-auto space-y-3">
-            <div className="flex justify-end mb-2">
+            <div className="flex gap-3 justify-end mb-2">
+              <QuizModal noteDescription={note.description} />
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger
