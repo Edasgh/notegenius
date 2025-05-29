@@ -1,7 +1,7 @@
 
 # 🧠 Notegenius – Your AI-Powered Study Companion
 
-**Notegenius** is an all-in-one intelligent notes platform for students. Upload notes, summarize them, ask questions, extract insights from YouTube videos or GitHub repositories, and supercharge your learning with AI.
+**Notegenius** is an all-in-one intelligent notes platform for students. Upload study materials, summarize them, ask questions, extract insights from YouTube videos or GitHub repositories, and supercharge your learning with AI.
 
 [LIVE DEMO](https://notegenius-lovat.vercel.app/)
 
@@ -15,11 +15,11 @@ Students need a centralized, intelligent platform that not only stores their lea
 
 **Notegenius** addresses this challenge by providing an AI-powered environment where students can:
 
-* Upload notes and generate smart summaries
+* Upload study materials and generate smart summaries
 * Ask specific questions about any part of their content
 * Convert YouTube videos into structured notes
 * Explore and understand GitHub codebases through natural language
-
+* Generate quiz from notes
 ---
 ## ✨ Features
 
@@ -38,7 +38,7 @@ Students need a centralized, intelligent platform that not only stores their lea
 ### 🎥 YouTube Video Notes
 - Paste a YouTube video link
 - Extract transcripts and generate structured notes
-- Break content down by timestamps or topics
+- Ask follow up questions and many more.
 
 ### 💻 GitHub Repository Q&A
 - Add any public or private (access token required) GitHub repository
