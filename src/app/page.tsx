@@ -16,15 +16,15 @@ import Link from "next/link";
 const features = [
   {
     title: "Summarize Any YouTube Video",
-    image: "transcript.png",
+    image: "video.png",
   },
   {
     title: "Understand and Ask About Your Notes",
-    image: "analysis.png",
+    image: "document.png",
   },
   {
     title: "Explore GitHub Repos with AI Explanations",
-    image: "chapters.png",
+    image: "repo.png",
   },
 ];
 

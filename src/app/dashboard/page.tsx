@@ -31,7 +31,7 @@ export default function Dashboard() {
       <div className="flex flex-col gap-5 justify-start items-start w-full">
         <h1 className="text-4xl font-semibold">Dashboard</h1>
         <div className="flex gap-10 justify-between px-4 items-start w-full">
-          <div className="flex flex-col flex-1 justify-start items-start gap-4">
+          <div className="flex flex-col w-full justify-start items-start gap-4">
             <div className="flex flex-wrap gap-2 justify-start items-start">
               <UploadDocument />
               Or
@@ -42,9 +42,10 @@ export default function Dashboard() {
             &nbsp;
             <Notes />
           </div>
-          <div className="flex flex-col flex-1 justify-start items-start gap-4">
+          {/* Search to be added later */}
+          {/* <div className="flex flex-col flex-1 justify-start items-start gap-4">
             <InputWithButton />
-          </div>
+          </div> */}
         </div>
       </div>
     </>

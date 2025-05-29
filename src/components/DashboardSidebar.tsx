@@ -11,10 +11,7 @@ import {
 } from "@/components/ui/sidebar";
 import {
   FileTextIcon,
-  HomeIcon,
   LayoutDashboard,
-  PenIcon,
-  SearchIcon,
   TerminalSquareIcon,
   YoutubeIcon,
 } from "lucide-react";
@@ -54,17 +51,6 @@ export default function DashboardSidebar() {
               <SidebarMenuItem>
                 <SidebarMenuButton asChild>
                   <Link
-                    className={`text-gray-700 dark:text-gray-50 ${pathName.includes("/notes") && "bg-gray-200 dark:bg-gray-700"}`}
-                    href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/notes`}
-                  >
-                    <PenIcon />
-                    <span>My Notes</span>
-                  </Link>
-                </SidebarMenuButton>
-              </SidebarMenuItem>
-              <SidebarMenuItem>
-                <SidebarMenuButton asChild>
-                  <Link
                     className={`text-gray-700 dark:text-gray-50 ${pathName.includes("/projects") && "bg-gray-200 dark:bg-gray-700"}`}
                     href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/projects`}
                   >
@@ -80,7 +66,7 @@ export default function DashboardSidebar() {
                     href={`${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/videos`}
                   >
                     <YoutubeIcon />
-                    <span>My Videos</span>
+                    <span>My YouTube Videos</span>
                   </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>

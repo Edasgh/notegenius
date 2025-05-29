@@ -33,6 +33,7 @@
     "convex": "^1.24.1",
     "date-fns": "^4.1.0",
     "googleapis": "^149.0.0",
+    "html2pdf.js": "^0.10.3",
     "ignore": "^7.0.4",
     "lang-map": "^0.4.0",
     "langchain": "^0.3.27",

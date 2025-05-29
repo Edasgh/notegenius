@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { api } from "../../../../convex/_generated/api";
 import {
   Calendar1Icon,
+  Download,
   Edit2Icon,
   FileBoxIcon,
   LucideEye,
@@ -35,6 +36,12 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 import MDEditor from "@uiw/react-md-editor";
 import { Input } from "@/components/ui/input";
@@ -199,13 +206,34 @@ function ViewNoteModal({
   noteId: Id<"note">;
   userId: string;
 }) {
-  const note = useQuery(api.note.getNoteById, {
-    noteId,
-    userId,
-  });
-
+  const note = useQuery(api.note.getNoteById, { noteId, userId });
   const isLoading = note === undefined;
   const notFound = note === null;
+
+  const exportRef = useRef<HTMLDivElement>(null);
+
+  const [html2pdfInstance, setHtml2pdfInstance] = useState<any>(null);
+
+  useEffect(() => {
+    // Dynamically import html2pdf.js on client
+    import("html2pdf.js").then((mod) => {
+      setHtml2pdfInstance(() => mod.default);
+    });
+  }, []);
+
+  const handleExportPDF = () => {
+    if (!exportRef.current || !html2pdfInstance || !note) return;
+
+    const opt: any = {
+      margin: 0.5,
+      filename: `${note.title || "note"}.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+    };
+
+    html2pdfInstance().set(opt).from(exportRef.current).save();
+  };
 
   return (
     <Dialog>
@@ -240,20 +268,36 @@ function ViewNoteModal({
             </DialogDescription>
           )}
         </DialogHeader>
-
         {!isLoading && !notFound && (
           <div className="text-sm break-words w-full overflow-y-auto space-y-3">
-            <span className="text-gray-500 font-semibold underline">
-              Description:
-            </span>
-            <MDEditor.Markdown
-              source={note.description}
-              style={{
-                backgroundColor: "#23203d",
-                color: "white",
-              }}
-              className="py-4 px-5 border rounded-md shadow-md"
-            />
+            <div className="flex justify-end mb-2">
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger className="border-none outline-none" onClick={handleExportPDF}>
+                    <Download className="cursor-pointer" />
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Export as PDF</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+            </div>
+
+            <div className="p-4 rounded-md space-y-4">
+              <h2 className="text-lg font-semibold text-gray-500">
+                Description:
+              </h2>
+              <div ref={exportRef}>
+                <MDEditor.Markdown
+                  source={note.description}
+                  style={{
+                    backgroundColor: "#23203d",
+                    color: "white",
+                  }}
+                  className="py-4 px-5 border rounded-md shadow-md markdown-preview"
+                />
+              </div>
+            </div>
           </div>
         )}
       </DialogContent>
@@ -308,6 +352,7 @@ export default function Notes() {
                         <Calendar1Icon className="text-purple-800 dark:text-purple-300 w-3 h-3" />
                         {new Date(doc._creationTime).toLocaleDateString()}
                       </span>
+
                       <span className="flex items-center gap-2 text-cyan-800 dark:text-cyan-300 text-xs">
                         <FileBoxIcon className="text-cyan-800 dark:text-cyan-300 w-3 h-3" />
                         <span className="font-semibold">
