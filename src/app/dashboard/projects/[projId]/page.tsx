@@ -291,7 +291,7 @@ export default function Project() {
                             <TooltipTrigger
                               onClick={() => {
                                 addMessageToNote(
-                                  `Question :\n${messages[index - 1].text}\n AI Answer :\n${message.text}`,
+                                  `\nFile: ${selectedFiles[0].fileName} \nQuestion :\n${messages[index - 1].text}\n AI Answer :\n${message.text}`,
                                   currentProject._id as string
                                 );
                               }}
