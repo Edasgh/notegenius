@@ -99,7 +99,7 @@ export default function SummaryVideo() {
       } else {
         await convex.mutation(api.note.saveNote, {
           link: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/videos/${videoId}`,
-          description: text,
+          description: `Summary:\n\n${text}`,
           recordTitle: currentVideo.title,
           title: text.slice(0, 50),
           userId: user.id,

@@ -120,7 +120,7 @@ const SummaryProj = () => {
       } else {
         await convex.mutation(api.note.saveNote, {
           link: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/projects/${projId}`,
-          description: text,
+          description: `\nSummary of ${recordTitle} :\n\n${text}`,
           recordTitle: currentProject.name,
           title: text.slice(0, 50),
           userId: user.id,

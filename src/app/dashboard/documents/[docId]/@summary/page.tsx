@@ -89,7 +89,7 @@ const SummaryDoc = () => {
       } else {
         await convex.mutation(api.note.saveNote, {
           link: `${process.env.NEXT_PUBLIC_BASE_URL}/dashboard/documents/${docId}`,
-          description: text,
+          description: `Summary :\n\n${text}`,
           recordTitle: currentDoc.title,
           recordId: recordId as Id<"documents">,
           title: text.slice(0, 50),
