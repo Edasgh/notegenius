@@ -22,6 +22,7 @@ import MDEditor from "@uiw/react-md-editor";
 import { marked } from "marked";
 import { Id } from "../../convex/_generated/dataModel";
 import { api } from "../../convex/_generated/api";
+import { QuizModal } from "./QuizModal";
 
 export default function ViewRecordNoteModal({
   recordId,
@@ -98,7 +99,8 @@ export default function ViewRecordNoteModal({
         </DialogHeader>
         {!isLoading && !notFound && (
           <div className="text-sm break-words w-full overflow-y-auto space-y-3">
-            <div className="flex justify-end mb-2">
+            <div className="flex gap-3 justify-end mb-2">
+               <QuizModal noteDescription={note.description} />
               <TooltipProvider>
                 <Tooltip>
                   <TooltipTrigger
